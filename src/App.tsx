@@ -1,8 +1,8 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import styled, { createGlobalStyle } from "styled-components";
-import reset from "styled-reset";
+import styled from "styled-components";
 import Loading from "./components/loading";
 import '@picocss/pico';
+import CreateAccount from "./components/createAccount";
 
 const router = createBrowserRouter([
   {
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/create-account",
-    //element: <CreateAccount />,
+    element: <CreateAccount />,
   },
 ]);
 

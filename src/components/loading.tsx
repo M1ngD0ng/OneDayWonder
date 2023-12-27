@@ -1,4 +1,4 @@
-import '@picocss/pico'
+import '@picocss/pico';
 import styled from 'styled-components';
 
 const H1 = styled.h1`
