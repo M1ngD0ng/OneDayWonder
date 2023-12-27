@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Loading from "./components/loading";
 import '@picocss/pico';
 import CreateAccount from "./components/createAccount";
+import Login from "./components/login";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    //element: <Login />,
+    element: <Login />,
   },
   {
     path: "/create-account",

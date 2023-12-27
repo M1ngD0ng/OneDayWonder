@@ -19,7 +19,7 @@ export default function Loading() {
         <>
             <H1> One Day <br /> Wonder </H1>
             <A href='/create-account' role='button' className='outline'> 회원가입 </A>
-            <A href='#' role='button' className='outline'> 로그인 </A>
+            <A href='/login' role='button' className='outline'> 로그인 </A>
             <A href='#' role='button' className='outline'> Google로 로그인 </A>
             <A href='#' role='button' className='outline'> Apple로 로그인 </A>
         </>
