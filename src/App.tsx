@@ -2,21 +2,40 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import styled from "styled-components";
 import Loading from "./components/loading";
 import '@picocss/pico';
-import CreateAccount from "./components/createAccount";
-import Login from "./components/login";
+import CreateAccount from "./routes/createAccount";
+import Login from "./routes/login";
+import NavBar from "./components/navbar";
+import ProtectedRoute from "./components/protected-route";
+import { useEffect, useState } from "react";
+import { auth } from "./firebase";
+import MyPage from "./routes/mypage";
+import Home from "./routes/home";
+import MyPlan from "./routes/myplan";
+import Like from "./routes/like";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Loading />,
+    element: (<ProtectedRoute>
+      <NavBar />
+    </ProtectedRoute>
+    ),
     children: [
       {
+        path: "/like",
+        element: <Like />,
+      },
+      {
         path: "/home",
-        //element: <Home />,
+        element: <Home />,
+      },
+      {
+        path: "/myplan",
+        element: <MyPlan />,
       },
       {
         path: "/mypage",
-        //element: <Mypage />,
+        element: <MyPage />,
       },
       {
         path: "/place",
@@ -43,9 +62,17 @@ const Main = styled.main`
 `;
 
 function App() {
+  const [isLoading, setLoading]=useState(true);
+  const init = async()=>{
+    await auth.authStateReady();
+    setLoading(false);
+  }
+  useEffect(()=>{
+    init();
+  },[]);
   return (
     <Main className='container'>
-      <RouterProvider router={router} />
+      {isLoading? <Loading/>:<RouterProvider router={router} /> }
     </Main>
   );
 }
