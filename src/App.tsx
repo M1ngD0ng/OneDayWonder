@@ -22,12 +22,12 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "/like",
-        element: <Like />,
+        path: "", // 로그인하면 바로 home으로 보내기 위해서 url 딱히 설정 안함
+        element: <Home />,
       },
       {
-        path: "/home",
-        element: <Home />,
+        path: "/like",
+        element: <Like />,
       },
       {
         path: "/myplan",
