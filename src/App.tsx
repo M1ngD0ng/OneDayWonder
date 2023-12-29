@@ -61,6 +61,7 @@ const router = createBrowserRouter([
 const GlobalStyles = createGlobalStyle`
   ${reset};
   height: 100vh;
+  overflow-x: hidden; // 동작안함...
   text-align: center;
 `;
 

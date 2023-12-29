@@ -1,5 +1,4 @@
 import { styled } from "styled-components";
-import reset from "styled-reset";
 
 const Wrapper=styled.div`
   height: 100vh;
