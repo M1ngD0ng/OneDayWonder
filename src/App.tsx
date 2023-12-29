@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "", // 로그인하면 바로 home으로 보내기 위해서 url 딱히 설정 안함
+        path: "/", 
         element: <Home />,
       },
       {
@@ -76,7 +76,7 @@ function App() {
   return (
     <>
       <GlobalStyles/>
-      {isLoading? <Loading/>:<RouterProvider router={router} /> }
+      {isLoading? <Loading />:<RouterProvider router={router} /> }
     </>
   );
 }
