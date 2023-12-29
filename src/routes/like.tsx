@@ -1,10 +1,11 @@
 import styled from "styled-components"
 
  
- const Wrapper=styled.div`
+const Wrapper=styled.div` //최상단 태그 , 배경색 설정
     height: 100vh;
     flex-direction: column;
     display: flex;
+   background-image: linear-gradient(to bottom, #ff9500, white 45%);
  `;
 
 const Upper=styled.div`
@@ -17,6 +18,7 @@ const Lower=styled.div`
 `
 const Info=styled.div`
   margin-top: 20%;
+  text-align: center;
   font-size: 25px;
 `;
 const Name=styled.span`

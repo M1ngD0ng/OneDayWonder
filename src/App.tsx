@@ -1,5 +1,5 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import Loading from "./components/loading";
 import '@picocss/pico';
 import CreateAccount from "./routes/createAccount";
@@ -12,6 +12,7 @@ import MyPage from "./routes/mypage";
 import Home from "./routes/home";
 import MyPlan from "./routes/myplan";
 import Like from "./routes/like";
+import reset from "styled-reset";
 
 const router = createBrowserRouter([
   {
@@ -57,7 +58,9 @@ const router = createBrowserRouter([
   },
 ]);
 
-const Main = styled.main`
+const GlobalStyles = createGlobalStyle`
+  ${reset};
+  height: 100vh;
   text-align: center;
 `;
 
@@ -71,9 +74,10 @@ function App() {
     init();
   },[]);
   return (
-    <Main className='container'>
+    <>
+      <GlobalStyles/>
       {isLoading? <Loading/>:<RouterProvider router={router} /> }
-    </Main>
+    </>
   );
 }
 
