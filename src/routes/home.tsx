@@ -1,5 +1,8 @@
 import { styled } from "styled-components";
 import '@picocss/pico';
+import { useState } from "react";
+import TodaysPlan from "../components/todaysplan";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Wrapper=styled.div`
   height: 100vh;
@@ -59,9 +62,46 @@ const SearchBtn = styled.button`
 const Today = styled.div`
   background-color: white;
   border-radius: 30px;
+  margin-top: 5%;
+  margin-left: 5%;
+  margin-right: 5%;
+  text-align: center;
+  padding-top: 3%;
+  padding-bottom: 3%;
+  display: flex;
+  flex-direction: column;
+`;
+const Small = styled.small`
+  font-size: 25px;
+  color: #ff9500;
+  font-weight: 600;
+`;
+const TodayBtn = styled.button`
+  width: 40%;
+  margin-top: 5%;
+  margin-left: 30%;
+  margin-right: 30%;
+  background-color: #ff9500;
+  color: white;
+  border: 0px;
+  border-radius: 10px;
+`;
+const NoPlan = styled.small`
+  margin-top: 5%;
+  color: #ff9500;
+  font-weight: 400;
 `;
 
 export default function Home(){
+  const navigate = useNavigate();
+  const [isTodays, setTodays]=useState(true);
+  const onPlanClick = async () => {
+    try {
+      navigate("/myplan");
+    } catch (e) {
+      console.log(e)
+    }
+  }
   return (
     <Wrapper>
       <H1> One Day Wonder </H1>
@@ -75,7 +115,9 @@ export default function Home(){
           </SearchBtn>
         </Search>
         <Today>
-          
+          <Small> 오늘의 일정 </Small>
+          {isTodays? <NoPlan> 오늘의 일정이 없습니다 </NoPlan>:<TodaysPlan/>}
+          <TodayBtn onClick={onPlanClick}> 일정 수정하기 </TodayBtn>
         </Today>
       </Grid>
     </Wrapper>
