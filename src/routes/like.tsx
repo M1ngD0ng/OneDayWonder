@@ -1,26 +1,39 @@
 import styled from "styled-components"
 import Modal from 'react-modal';
 import { useEffect, useRef, useState } from "react";
- 
+
+
+interface ItemDetail{
+  title: string;
+  description: string;
+  img: string;
+}
 const Wrapper=styled.div` //최상단 태그 , 배경색 설정
-    height: 100vh;
-    flex-direction: column;
-    display: flex;
-   background-image: linear-gradient(to bottom, #ff9500, white 45%);
+  height: 100vh;
+  position: fixed;
+  flex-direction: column;
+  display: flex;
+  background-image: linear-gradient(to bottom, #ff9500, white 45%);
  `;
 
-const Upper=styled.div`
-  justify-content: center;
+const Upper=styled.div`   
+  width: 100%;
 `
 const Lower=styled.div`
+  position: relative ;
+  overflow-y: scroll;
+  padding-top: 5%;
   ::-webkit-scrollbar {
       display:none;
     }
 `
 const Info=styled.div`
-  margin-top: 20%;
-  text-align: center;
   font-size: 25px;
+  color: white; 
+  flex-direction: row;
+  display: flex;
+  justify-content: center;
+  margin-top: 20%;
 `;
 const Name=styled.span`
   font-weight: bold;
@@ -29,7 +42,8 @@ const Name=styled.span`
 const Order=styled.div`
   margin-top: 10%;
   button{
-    color: black;
+    font-weight: lighter;
+    color: grey;
     font-size: 16px;
     width: max-content;
     float: right;
@@ -38,31 +52,106 @@ const Order=styled.div`
     outline: none;
     cursor: pointer;
     background-color: inherit;
+    .active{
+      font-weight: bolder;
+    }
   }
 `;
 
-const OrderByDay=styled.div`
+const Category=styled.div`
   div{
     margin-left: 5%;
     float: left;
     margin-bottom: 3%;
+    font-weight: lighter;
   }
 `;
 
 const Content=styled.div`
   box-shadow: 1px solid;
-  img {
-    width: 20%;
-    border-radius: 15%;
+  flex-direction: column;
+  width: 95%; 
+  display: flex; 
+  div{
+    margin: 10px; 
   }
 `;
-
-const StyledModal =styled(Modal)`
-  position: absolute;
-  top: auto;
-  left: auto; 
-  height: 50%;
-  width: 75%;
+const Onediv=styled.div`
+  border: 1px;
+  flex-direction: row;
+  box-shadow: 0px 5px 5px lightgrey;
+  border-radius: 15px;
+  width: 90%; 
+  height: fit-content;
+  padding: 4%; 
+  background-color: white;
+  img {
+    width: 20%;
+    border-radius: 10px; 
+    float: left;
+  }
+  div{
+    width: 70%;
+  }
+  h3{
+    font-weight: bold;
+    padding-bottom: 5%;
+  }
+  p{ 
+    font-size: smaller; 
+    flex: 1; 
+  }
+`;
+const Reco=styled.div`
+  position: relative;
+  flex-direction: column;
+  display: flex;
+  overflow-x: scroll;
+  margin-top: 10%;
+  ::-webkit-scrollbar {
+      display:none;
+    }
+`
+const RecoContent=styled.div`
+  overflow-x: scroll; 
+  overflow-y: hidden;
+  box-shadow: 1px solid; 
+  flex-direction: row;
+  display: flex;
+  height: 40%;
+  width: 90%;
+  div{
+    margin: 10px; 
+  }
+`;
+const OneRecoDiv=styled.div`
+  border: 1px; 
+  box-shadow: 0px 5px 5px lightgrey;
+  border-radius: 15px; 
+  padding: 4%; 
+  background-color: white;
+  img {
+    width: 20%;
+    border-radius: 10px; 
+    float: left;
+  }
+  div{
+    width: 70%;
+  }
+  h3{
+    font-weight: bold;
+    padding-bottom: 5%;
+  }
+  p{ 
+    font-size: smaller; 
+    flex: 1; 
+  }
+`;
+const StyledModal =styled(Modal)` 
+  align-items: baseline;
+  flex-direction: column;
+  display: flex;
+  width: 70%;
 `
 const StyledOverlay = styled.div`
   position: fixed;
@@ -70,17 +159,69 @@ const StyledOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: transparent; // 배경을 투명하게 설정
+  background-color: rgba(0, 0, 0, 0); // 배경을 투명하게 설정
 `;
+// 임시 데이터
+const tempData = [
+  { id: 1, title: "국제식당", description: "인천광역시 남구 용현동 194-19번지", img: "../../../public/ex.jpg" },
+  { id: 2, title: "카페 하타가야", description: "인천광역시 미추홀구 용현동 195 28번지 2층", img: "../../../public/ex.jpg" },
+  { id: 3, title: "국제식당", description: "인천광역시 남구 용현동 194-19번지", img: "../../../public/ex.jpg" },
+  { id: 4, title: "카페 하타가야", description: "인천광역시 미추홀구 용현동 195 28번지 2층", img: "../../../public/ex.jpg" },
+  { id: 5, title: "국제식당", description: "인천광역시 남구 용현동 194-19번지", img: "../../../public/ex.jpg" },
+  // { id: 6, title: "카페 하타가야", description: "인천광역시 미추홀구 용현동 195 28번지 2층", img: "../../../public/ex.jpg" },
+  // ... 나머지 장소들 ...
+];
+
 Modal.setAppElement('#root'); 
 export default function Like(){
+  const [likedPlaces, setLikedPlaces] = useState(tempData);
+  const [recoPlaces, setRecoPlaces]=useState(tempData);
   const el=useRef<HTMLDivElement>(null);
   const [modalIsOpen, setModalIsOpen]=useState(false);
-
-  const openModal = (e:React.TouchEvent<HTMLDivElement>) => {
-    e.stopPropagation(); // 이벤트 버블링 방지
+  const [modalContent, setModalContent]=useState<ItemDetail | null>(null);
+  
+  const openModalWithContent=(content:ItemDetail)=>{
+    setModalContent(content);
     setModalIsOpen(true);
   };
+  const renderModalContent = () => {
+    if (!modalContent) return null;
+    return (
+      <div>
+        <img src={modalContent.img}/>
+        <h2>{modalContent.title}</h2>
+        <p>{modalContent.description}</p>
+      </div>
+    );
+  };
+   // 좋아요 누른 장소 목록을 렌더링
+   const renderLikedPlaces = () => {
+    return likedPlaces.map(place => (
+      <Onediv key={place.id} onClick={() => openModalWithContent(place)}>
+        <img src={place.img}/>
+        <div>
+          <h3>{place.title}</h3>
+          <p>{place.description}</p>
+        </div>
+      </Onediv>
+    ));
+  };
+  const renderRecoPlaces=() => {
+    return recoPlaces.map(place => (
+      <OneRecoDiv key={place.id} onClick={() => openModalWithContent(place)}>
+        <img src={place.img}/>
+        <div>
+          <h3>{place.title}</h3>
+          <p>{place.description}</p>
+        </div>
+      </OneRecoDiv>
+    ));
+  };
+  
+  // const openModal = (e:React.TouchEvent<HTMLDivElement>) => {
+  //   e.stopPropagation(); // 이벤트 버블링 방지
+  //   setModalIsOpen(true);
+  // };
 
   const closeModal = () => {
     setModalIsOpen(false);
@@ -114,17 +255,28 @@ export default function Like(){
         </Order>
       </Upper>
       <Lower>
-        <OrderByDay>
+        <Category>
           <div>2023년 12월 13일</div>
-          <Content onTouchStart={openModal}>
-            <img src="../../../public/ex.jpg" />
-           <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
-            <div>짝노시발아</div>
-           </Modal>
+          <Content >
+          {renderLikedPlaces()}
           </Content>
-
-        </OrderByDay>
+            <StyledModal isOpen={modalIsOpen} onRequestClose={closeModal}>
+              {renderModalContent()}
+            </StyledModal>
+        </Category>
       </Lower>
+      <Reco>
+        <Category>
+          <div>
+          <span>✅</span>&nbsp;
+          <Name>이민정</Name>&nbsp;
+          <span>님이 좋아할 만한 장소</span>
+          </div>
+          </Category>
+        <RecoContent>
+          {renderRecoPlaces()}
+        </RecoContent>
+      </Reco>
     </Wrapper>
   )
 }
