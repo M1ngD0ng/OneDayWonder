@@ -13,6 +13,7 @@ import Home from "./routes/home";
 import MyPlan from "./routes/myplan";
 import Like from "./routes/like";
 import reset from "styled-reset";
+import Place from "./routes/place";
 
 const router = createBrowserRouter([
   {
@@ -40,7 +41,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/place",
-        //element: <Place />,
+        element: <Place />,
       },
       {
         path: "/search",

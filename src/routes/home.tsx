@@ -2,10 +2,10 @@ import { styled } from "styled-components";
 import '@picocss/pico';
 import { useState } from "react";
 import TodaysPlan from "../components/todaysplan";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper=styled.div`
-  height: 100vh;
+  height: 100%;
   flex-direction: column;
   display: flex;
   background-color: #ff9500;
@@ -21,6 +21,8 @@ const H1 = styled.h1`
 const Grid = styled.div`
   margin-left: 5%;
   margin-right: 5%;
+  display: flex;
+  flex-direction: column;
 `;
 const Search = styled.div`
   display: flex;
@@ -91,6 +93,48 @@ const NoPlan = styled.small`
   color: #ff9500;
   font-weight: 400;
 `;
+const HotSpot = styled.div`
+  margin-top: 5%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-bottom: 10%;
+  display: flex;
+  flex-direction: column;
+`;
+const HotSmall = styled.small`
+  font-size: 25px;
+  color: white;
+  font-weight: 600;
+`;
+const HotFigure = styled.figure`
+  margin-top: 3%;
+  width: 100%;
+  height: 300px;
+  display: inline;
+  overflow-x: scroll;
+  white-space: nowrap;
+`;
+const ImgDiv = styled.div`
+  position: relative;
+  display: inline-block;
+  margin-right: 5%;
+`;
+const ImgA = styled.a``;
+const HotImg = styled.img`
+  width: 250px;
+  height: 250px;
+  border-radius: 10px;
+`;
+const TextDiv = styled.div`
+  position: absolute;
+  background-color: none;
+  color: white;
+  top: 80%;
+  left: 30%;
+  transform: translate(-50%,-50%);
+  font-size: 25px;
+  font-weight: 500;
+`;
 
 export default function Home(){
   const navigate = useNavigate();
@@ -119,6 +163,35 @@ export default function Home(){
           {isTodays? <NoPlan> 오늘의 일정이 없습니다 </NoPlan>:<TodaysPlan/>}
           <TodayBtn onClick={onPlanClick}> 일정 수정하기 </TodayBtn>
         </Today>
+        <HotSpot>
+          <HotSmall> 요즘 핫한 Spot 🔥 </HotSmall>
+          <HotFigure>
+            <ImgDiv>
+              <ImgA href="/place">
+                <HotImg src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800" />
+                <TextDiv> 인천 <br/> 인천대공원 </TextDiv>
+              </ImgA>
+            </ImgDiv>
+            <ImgDiv>
+              <ImgA href="/place">
+                <HotImg src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800" />
+                <TextDiv> 인천 <br/> 인천대공원 </TextDiv>
+              </ImgA>
+            </ImgDiv>
+            <ImgDiv>
+              <ImgA href="/place">
+                <HotImg src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800" />
+                <TextDiv> 인천 <br/> 인천대공원 </TextDiv>
+              </ImgA>
+            </ImgDiv>
+            <ImgDiv>
+              <ImgA href="/place">
+                <HotImg src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800" />
+                <TextDiv> 인천 <br/> 인천대공원 </TextDiv>
+              </ImgA>
+            </ImgDiv>
+          </HotFigure>
+        </HotSpot>
       </Grid>
     </Wrapper>
   )
