@@ -110,7 +110,7 @@ export default function Login() {
           </Div>
           <Button type='submit' value={isLoading ? "Loading..." : "Log In"} >로그인</Button>              
         </Form>
-        <Button onClick={onGitClick} >Google로 로그인</Button>
+        <Button onClick={onGitClick} >Github으로 로그인</Button>
         <Button onClick={onAppleClick} >Apple로 로그인</Button>
       </Wrapper>
   );
