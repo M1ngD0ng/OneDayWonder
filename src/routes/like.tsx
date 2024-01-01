@@ -9,7 +9,7 @@ interface ItemDetail{
   img: string;
 }
 const Wrapper=styled.div` //최상단 태그 , 배경색 설정
-  height: 100vh;
+  height: 100%;
   position: fixed;
   flex-direction: column;
   display: flex;
@@ -23,6 +23,7 @@ const Lower=styled.div`
   position: relative ;
   overflow-y: scroll;
   padding-top: 5%;
+  margin-bottom: 5%;
   ::-webkit-scrollbar {
       display:none;
     }
@@ -71,7 +72,7 @@ const Content=styled.div`
   box-shadow: 1px solid;
   flex-direction: column;
   width: 95%; 
-  display: flex; 
+  display: flex;  
   div{
     margin: 10px; 
   }
@@ -103,48 +104,64 @@ const Onediv=styled.div`
   }
 `;
 const Reco=styled.div`
-  position: relative;
   flex-direction: column;
   display: flex;
   overflow-x: scroll;
-  margin-top: 10%;
+  margin-bottom: 40%;
   ::-webkit-scrollbar {
       display:none;
     }
+  
+  
 `
 const RecoContent=styled.div`
-  overflow-x: scroll; 
-  overflow-y: hidden;
+  display: flex;
+  flex-direction: row;
+  overflow-x: scroll;
+  width: 100%;
+  height: 100%;
+  overflow-y: hidden;  
+  /* overflow-x: scroll; 
   box-shadow: 1px solid; 
   flex-direction: row;
   display: flex;
-  height: 40%;
   width: 90%;
+   */
+  box-shadow: 1px solid;  
   div{
     margin: 10px; 
   }
 `;
 const OneRecoDiv=styled.div`
-  border: 1px; 
+  flex: 0 0 auto; // flex 아이템의 크기 조정
   box-shadow: 0px 5px 5px lightgrey;
-  border-radius: 15px; 
-  padding: 4%; 
-  background-color: white;
+  border-radius: 15px;
+  width: 90%; // 너비 설정
+  height: fit-content; // 높이 설정
+  padding: 4%; // 패딩 설정
+  background-color: white; // 배경색 설정
+  margin: 10px; // 마진 설정
+  display: flex; // flexbox 활성화
+  flex-direction: row; // 행 방향으로 요소 배치
+
   img {
     width: 20%;
-    border-radius: 10px; 
+    border-radius: 10px;
     float: left;
   }
-  div{
+
+  div {
     width: 70%;
   }
-  h3{
+
+  h3 {
     font-weight: bold;
     padding-bottom: 5%;
   }
-  p{ 
-    font-size: smaller; 
-    flex: 1; 
+
+  p { 
+    font-size: smaller;
+    flex: 1;
   }
 `;
 const StyledModal =styled(Modal)` 
@@ -166,6 +183,8 @@ const tempData = [
   { id: 1, title: "국제식당", description: "인천광역시 남구 용현동 194-19번지", img: "../../../public/ex.jpg" },
   { id: 2, title: "카페 하타가야", description: "인천광역시 미추홀구 용현동 195 28번지 2층", img: "../../../public/ex.jpg" },
   { id: 3, title: "국제식당", description: "인천광역시 남구 용현동 194-19번지", img: "../../../public/ex.jpg" },
+  { id: 4, title: "카페 하타가야", description: "인천광역시 미추홀구 용현동 195 28번지 2층", img: "../../../public/ex.jpg" },
+  { id: 5, title: "국제식당", description: "인천광역시 남구 용현동 194-19번지", img: "../../../public/ex.jpg" },
   { id: 4, title: "카페 하타가야", description: "인천광역시 미추홀구 용현동 195 28번지 2층", img: "../../../public/ex.jpg" },
   { id: 5, title: "국제식당", description: "인천광역시 남구 용현동 194-19번지", img: "../../../public/ex.jpg" },
   // { id: 6, title: "카페 하타가야", description: "인천광역시 미추홀구 용현동 195 28번지 2층", img: "../../../public/ex.jpg" },
@@ -275,8 +294,8 @@ export default function Like(){
           </Category>
         <RecoContent>
           {renderRecoPlaces()}
-        </RecoContent>
-      </Reco>
+        </RecoContent> 
+        </Reco>
     </Wrapper>
   )
 }

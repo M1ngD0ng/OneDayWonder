@@ -5,8 +5,9 @@ import '@picocss/pico';
 
 
 const Wapper=styled.div`
-  height: 100vh;
+  height: 100%;
 `;
+
 const Nav=styled.div`
   border-top: 1px solid #ff9500;
   background-color: white;
