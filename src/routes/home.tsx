@@ -9,20 +9,23 @@ const Wrapper=styled.div`
   flex-direction: column;
   display: flex;
   background-color: #ff9500;
+  position: fixed;
+  overflow-y: auto;
  `;
 const H1 = styled.h1`
   color: white;
-  margin-top: 5%;
+  margin-top: 10%;
   font-size: 50px;
   font-weight: 700;
   text-align: center;
-  margin-bottom: 5%;
+  margin-bottom: 10%;
 `;
 const Grid = styled.div`
   margin-left: 5%;
   margin-right: 5%;
   display: flex;
   flex-direction: column;
+  padding-bottom: 10%;
 `;
 const Search = styled.div`
   display: flex;
@@ -64,7 +67,7 @@ const SearchBtn = styled.button`
 const Today = styled.div`
   background-color: white;
   border-radius: 30px;
-  margin-top: 5%;
+  margin-top: 10%;
   margin-left: 5%;
   margin-right: 5%;
   text-align: center;
@@ -72,6 +75,7 @@ const Today = styled.div`
   padding-bottom: 3%;
   display: flex;
   flex-direction: column;
+  box-shadow: 0px 5px 5px orange;
 `;
 const Small = styled.small`
   font-size: 25px;
@@ -94,7 +98,7 @@ const NoPlan = styled.small`
   font-weight: 400;
 `;
 const HotSpot = styled.div`
-  margin-top: 5%;
+  margin-top: 10%;
   margin-left: 5%;
   margin-right: 5%;
   margin-bottom: 10%;
@@ -124,6 +128,7 @@ const HotImg = styled.img`
   width: 250px;
   height: 250px;
   border-radius: 10px;
+  box-shadow: 0px 5px 5px white;
 `;
 const TextDiv = styled.div`
   position: absolute;
