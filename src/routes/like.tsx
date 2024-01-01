@@ -10,9 +10,11 @@ interface ItemDetail{
 }
 const Wrapper=styled.div` //최상단 태그 , 배경색 설정
   height: 100%;
+  width: 100%;
   position: fixed;
   flex-direction: column;
   display: flex;
+  overflow-y: auto;
   background-image: linear-gradient(to bottom, #ff9500, white 45%);
  `;
 
@@ -106,21 +108,22 @@ const Onediv=styled.div`
 const Reco=styled.div`
   flex-direction: column;
   display: flex;
-  overflow-x: scroll;
-  margin-bottom: 40%;
+  position: relative;
+  width : 90%;
+  padding: 0 5%;
+  margin-bottom: 25%;
   ::-webkit-scrollbar {
       display:none;
     }
-  
   
 `
 const RecoContent=styled.div`
   display: flex;
   flex-direction: row;
   overflow-x: scroll;
+  overflow-y: auto;
   width: 100%;
-  height: 100%;
-  overflow-y: hidden;  
+  height: 100%; 
   /* overflow-x: scroll; 
   box-shadow: 1px solid; 
   flex-direction: row;
@@ -137,7 +140,7 @@ const OneRecoDiv=styled.div`
   box-shadow: 0px 5px 5px lightgrey;
   border-radius: 15px;
   width: 90%; // 너비 설정
-  height: fit-content; // 높이 설정
+  height: 80%; // 높이 설정
   padding: 4%; // 패딩 설정
   background-color: white; // 배경색 설정
   margin: 10px; // 마진 설정
@@ -283,7 +286,7 @@ export default function Like(){
               {renderModalContent()}
             </StyledModal>
         </Category>
-      </Lower>
+      </Lower> 
       <Reco>
         <Category>
           <div>
