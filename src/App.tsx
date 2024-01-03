@@ -13,7 +13,7 @@ import Home from "./routes/home";
 import MyPlan from "./routes/myplan";
 import Like from "./routes/like";
 import reset from "styled-reset";
-import Place from "./routes/place";
+import Place from "./routes/detail-place";
 import Search from "./routes/search";
 
 const router = createBrowserRouter([
