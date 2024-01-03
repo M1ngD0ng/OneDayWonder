@@ -14,6 +14,8 @@ import MyPlan from "./routes/myplan";
 import Like from "./routes/like";
 import reset from "styled-reset";
 import CreatePlan from "./routes/createPlan";
+import Place from "./routes/detail-place";
+import Search from "./routes/search";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +26,7 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "", // 로그인하면 바로 home으로 보내기 위해서 url 딱히 설정 안함
+        path: "/", 
         element: <Home />,
       },
       {
@@ -41,11 +43,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/place",
-        //element: <Place />,
+        element: <Place />,
       },
       {
         path: "/search",
-        //element: <Search />,
+        element: <Search />,
+      },
+      {
+        path: "/create-plan",
+        element: <CreatePlan />,
       },
       {
         path: "/create-plan",
@@ -66,7 +72,6 @@ const router = createBrowserRouter([
 const GlobalStyles = createGlobalStyle`
   ${reset};
   height: 100%; 
-  overflow-x: hidden; // 동작안함...
   text-align: center;
 `;
 
@@ -82,7 +87,7 @@ function App() {
   return (
     <>
       <GlobalStyles/>
-      {isLoading? <Loading/>:<RouterProvider router={router} /> }
+      {isLoading? <Loading />:<RouterProvider router={router} /> }
     </>
   );
 }
