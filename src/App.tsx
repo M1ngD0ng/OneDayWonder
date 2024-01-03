@@ -13,6 +13,7 @@ import Home from "./routes/home";
 import MyPlan from "./routes/myplan";
 import Like from "./routes/like";
 import reset from "styled-reset";
+import CreatePlan from "./routes/createPlan";
 
 const router = createBrowserRouter([
   {
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/myplan",
-        element: <MyPlan />,
+        element: <MyPlan />, 
       },
       {
         path: "/mypage",
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "/search",
         //element: <Search />,
+      },
+      {
+        path: "/create-plan",
+        element: <CreatePlan />,
       },
     ],
   },

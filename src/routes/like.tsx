@@ -173,14 +173,7 @@ const StyledModal =styled(Modal)`
   display: flex;
   width: 70%;
 `
-const StyledOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0); // 배경을 투명하게 설정
-`;
+
 // 임시 데이터
 const tempData = [
   { id: 1, title: "국제식당", description: "인천광역시 남구 용현동 194-19번지", img: "../../../public/ex.jpg" },
