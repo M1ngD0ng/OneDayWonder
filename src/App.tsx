@@ -53,10 +53,6 @@ const router = createBrowserRouter([
         path: "/create-plan",
         element: <CreatePlan />,
       },
-      {
-        path: "/create-plan",
-        element: <CreatePlan />,
-      },
     ],
   },
   {
