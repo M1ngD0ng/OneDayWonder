@@ -3,6 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { auth } from '../firebase';
 import MyPageEdit from '../components/mypage-edit';
+import { useNavigate } from 'react-router-dom';
 
 const Div = styled.div`
   width: 100%;
@@ -41,6 +42,11 @@ const ImgDiv = styled.div`
     height: 100px;
     color: #ff9500;
   }
+`;
+export const PhotoImg = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
 `;
 const InfoDiv = styled.div`
   display: flex;
@@ -88,6 +94,7 @@ const TagA = styled.a`
 `;
 const EditDiv = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 5%;
@@ -106,6 +113,14 @@ export default function MyPage(){
   const onEditClick = async () => {
     setshowEdit(true);
   };
+  const navigate = useNavigate();
+  const onLogOut = async () => {
+    const ok = confirm("로그아웃 하시겠습니까? :( ");
+    if (ok) {
+      await auth.signOut();
+      navigate("/login");
+    }
+  };
   return (
 
     <Div>
@@ -115,7 +130,7 @@ export default function MyPage(){
       <MyDiv>
         <ImgDiv>
           {isPhotos ? 
-            <img/>: 
+            <PhotoImg src={isPhotos} />: 
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
           }
@@ -137,6 +152,7 @@ export default function MyPage(){
         </TagDiv>
         <EditDiv>
           <Button onClick={onEditClick} > 정보 수정하기 </Button>
+          <Button onClick={onLogOut} > 로그아웃하기 </Button>
         </EditDiv>
       </MyDiv>
       </>
