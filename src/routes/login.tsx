@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
-import { signInWithEmailAndPassword } from "firebase/auth"; 
+import { GithubAuthProvider, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"; 
 
 const Wrapper = styled.div`
   margin-right: 10%;
@@ -86,11 +86,15 @@ export default function Login() {
     } finally {
       setLoading(false);
     }
-  }; 
-  const onGitClick = async () => {
-
   };
-  const onAppleClick = async () => {
+  const onGoogleClick = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth,provider);
+      navigate("/");
+    } catch (e) {
+      console.error(e);
+    }
 
   };
 
@@ -110,8 +114,7 @@ export default function Login() {
           </Div>
           <Button type='submit' value={isLoading ? "Loading..." : "Log In"} >로그인</Button>              
         </Form>
-        <Button onClick={onGitClick} >Github으로 로그인</Button>
-        <Button onClick={onAppleClick} >Apple로 로그인</Button>
+        <Button onClick={onGoogleClick} >Google로 로그인</Button>
       </Wrapper>
   );
 }
