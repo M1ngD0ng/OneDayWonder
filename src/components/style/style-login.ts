@@ -8,14 +8,14 @@ export const Wrapper = styled.div`
   height: 100vh;
 `;
 export const H1 = styled.h1`
-    color: #ff9500;
+    color: #8A2BE2;
     margin-top: 10%;
     font-size: 50px;
     font-weight: 700;
     text-align: center;
 `;
 export const H2 = styled.h2`
-    color: #ff9500;
+    color: #8A2BE2;
     margin-top: 5%;
     margin-bottom: 10%;
     font-size: 40px;
@@ -23,7 +23,7 @@ export const H2 = styled.h2`
     text-align: center;
 `;
 export const Form = styled.form`
-    color: #ff9500;
+    color: #8A2BE2;
 `;
 export const Label = styled.label`
     float: left;
@@ -31,7 +31,7 @@ export const Label = styled.label`
     margin-bottom: 1%;
 `;
 export const Input = styled.input`
-    border-color: #ff9500;
+    border-color: #8A2BE2;
 `;
 export const Div = styled.div`
     display: flex;
@@ -39,11 +39,11 @@ export const Div = styled.div`
     text-align: center;
 `;
 export const A = styled.a`
-    color: #ff9500;
+    color: #8A2BE2;
     margin-bottom: 2%;
 `;
 export const Button = styled.button`
     margin-top: 1%;
-    background-color: #ff9500;
-    border-color: #ff9500;
+    background-color: #8A2BE2;
+    border-color: #8A2BE2;
 `;

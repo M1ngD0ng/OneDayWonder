@@ -27,7 +27,7 @@ const ImgLabel = styled.label`
     svg {
         width: 100px;
         height: 100px;
-        color: #ff9500;
+        color: #8A2BE2;
     }
 `;
 const ImgInput = styled.input`
@@ -36,7 +36,7 @@ const ImgInput = styled.input`
 const NameLabel = styled.label`
   margin-top: 5%;
   margin-left: 5%;
-  color: #ff9500;
+  color: #8A2BE2;
   font-size: 25px;
   font-weight: 500;
   float: left;

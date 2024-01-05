@@ -15,7 +15,7 @@ const Wrapper=styled.div` //최상단 태그 , 배경색 설정
   flex-direction: column;
   display: flex;
   overflow-y: auto;
-  background-image: linear-gradient(to bottom, #ff9500, white 45%);
+  background-image: linear-gradient(to bottom, #8A2BE2, white 45%);
  `;
 
 const Upper=styled.div`   

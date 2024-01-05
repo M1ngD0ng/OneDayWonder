@@ -15,14 +15,14 @@ const Img = styled.img`
     height: 30%;
 `;
 const H1 = styled.h1`
-    color: #ff9500;
+    color: #8A2BE2;
     font-size: 35px;
     font-weight: bolder;
     text-align: center;
     margin-top: 5%;
 `;
 const ReviewDiv = styled.div`
-    background-color: #ff9500;
+    background-color: #9B4DE3;
     margin-left: 5%;
     margin-right: 5%;
     margin-top: 5%;
@@ -45,7 +45,7 @@ const TagDiv = styled.div`
     justify-content: center;
 `;
 const TagA = styled.a`
-  background-color: #FFC067;
+  background-color: #BB91E3;
   color: white;
   width: 20%;
   border-radius: 10px;
@@ -61,7 +61,7 @@ const H3 = styled.h3`
     margin-top: 5%;
     margin-left: 5%;
     margin-right: 5%;
-    color: #ff9500;
+    color: #8A2BE2;
     font-size: 15px;
 `;
 const MapDiv = styled.div`

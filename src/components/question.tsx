@@ -11,8 +11,9 @@ const QuesBlock= styled.div`
   margin-top: 5%;
   padding: 7% 10%;  
   width: 90%;
-  background-color: #ff9500;
-  box-shadow: 1px solid black;
+  background-color: #9B4DE3; 
+
+  box-shadow: 1px 2px 3px grey;
   border-radius: 20px;
   position: relative; 
   color: white;
@@ -46,7 +47,7 @@ const TagDiv = styled.div`
 `;
 const TagA = styled.a`
   width: max-content;
-  background-color: #FFC067;
+  background-color: #BB91E3;
   color: white; 
   border-radius: 10px;
   padding: 3% 5%;
@@ -54,7 +55,7 @@ const TagA = styled.a`
   text-align: center;
   text-decoration: none;
   font-size: 20px;
-  box-shadow: 0px 2px 5px white;
+  box-shadow: 0px 2px 5px grey;
 `;
 export default function Question(){
   const [isLastQues, setLasQues]=useState(false);
