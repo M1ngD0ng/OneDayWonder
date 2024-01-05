@@ -5,7 +5,7 @@ import { useState } from "react";
 const PlanBlock= styled.div`
   margin-top: 5%;
   padding: 7% 10%;  
-  background-color: #ff9500;
+  background-color: #8A2BE2;
   box-shadow: 1px solid black;
   border-radius: 20px;
   position: relative; 
@@ -22,7 +22,7 @@ const PlanBlock= styled.div`
 const LocaNum=styled.span` 
   font-weight: bold;
   padding: 1% 2%;
-  color: #ff9500;
+  color: #8A2BE2;
   text-align: center;
   background-color: white;
   border-radius: 5px;

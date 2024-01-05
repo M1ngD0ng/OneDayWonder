@@ -6,7 +6,7 @@ const Wrapper=styled.div`
     height: 100%;
     flex-direction: column;
     display: flex;
-    background-color: #ff9500;
+    background-color: #8A2BE2;
     position: fixed;
     overflow-y: auto;
  `;
