@@ -69,16 +69,32 @@ const MapDiv = styled.div`
     width: 90%;
     height: 200px;
     border-radius: 10px;
+    margin-bottom: 5%;
 `;
 
 export default function Place() {
     useEffect(() => {
-        const container = document.getElementById('map');
-        const options = {
-            center: new window.kakao.maps.LatLng(33.450701, 126.570667),
-            level: 3
+        const loadGoogleMapsScript = () => {
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=%REACT_APP_MAPS_API_KEY%&libraries=places`;
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+            script.onload = initMap;
         };
-        const map = new window.kakao.maps.Map(container, options);
+        const initMap = () => {
+            const myLatLng = { lat: 37.5665, lng: 126.978 };
+            const map = new window.google.maps.Map(document.getElementById('map'), {
+                center: myLatLng,
+                zoom: 17,
+            });
+            new google.maps.Marker({
+                position: myLatLng,
+                map,
+                title: "Hello World!",
+              });
+        };
+        loadGoogleMapsScript();
     }, []);
     return(
         <Wrapper>
@@ -99,7 +115,6 @@ export default function Place() {
             </TagDiv>
             <H3> 위치 : 경기도 광명시 일직동 </H3>
             <MapDiv id="map"></MapDiv>
-            
         </Wrapper>
     );
 }
