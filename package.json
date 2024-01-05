@@ -13,6 +13,7 @@
     "@picocss/pico": "^1.5.10",
     "@types/react-modal": "^3.16.3",
     "firebase": "^10.7.1",
+    "os": "^0.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-kakao-maps": "^0.0.13",
