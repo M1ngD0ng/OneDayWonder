@@ -1,8 +1,11 @@
 import { styled } from "styled-components";
 import '@picocss/pico';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TodaysPlan from "../components/todaysplan";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { db } from "../firebase";
+import { collection, doc, getDocs, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { Unsubscribe } from "firebase/auth";
 
 const Wrapper=styled.div`
   height: 100%;
@@ -124,28 +127,41 @@ const ImgDiv = styled.div`
   position: relative;
   display: inline-block;
   margin-right: 5%;
+  border-radius: 10px;
+  box-shadow: 1px 2px 3px purple;
 `;
-const ImgA = styled.a``;
 const HotImg = styled.img`
   width: 250px;
   height: 250px;
-  border-radius: 10px;
-  box-shadow: 1px 2px 3px purple;
 `;
 const TextDiv = styled.div`
   position: absolute;
   background-color: none;
   color: white;
-  top: 80%;
-  left: 30%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%,-50%);
   font-size: 25px;
   font-weight: 500;
 `;
-
+export interface Place {
+  id: string;
+  address: string;
+  lat: number;
+  liked: number;
+  lng: number;
+  name: string;
+  phoneNumber: string;
+  picked: number;
+  placeId: string;
+  rating: number;
+  types: string;
+  url: string;
+}
 export default function Home(){
   const navigate = useNavigate();
   const [isTodays, setTodays]=useState(true);
+  const [topThreeData, setTopThreeData] = useState<Place[]>([]);
   const onPlanClick = async () => {
     try {
       navigate("/myplan");
@@ -153,6 +169,41 @@ export default function Home(){
       console.log(e)
     }
   }
+  useEffect(() => {
+    let unsubscribe: Unsubscribe | null = null;
+    const fetchTopThreeData = async () => {
+      const q = query(
+        collection(db, 'sample'),
+        where('rating','!=','N/A'),
+        orderBy('rating','desc'),
+        limit(3)
+      );
+      unsubscribe = await onSnapshot(q, (snapshot) => {
+        const qdata = snapshot.docs.map((doc) => {
+          const { address, lat, liked, lng, name, phoneNumber, picked, placeId, rating, types, url } = doc.data();
+          return {
+            address,
+            lat,
+            liked,
+            lng,
+            name,
+            phoneNumber,
+            picked,
+            placeId,
+            rating,
+            types,
+            url,
+            id: doc.id,
+          };
+        });
+        setTopThreeData(qdata);
+      });
+  };
+  fetchTopThreeData();
+  return () => {
+    unsubscribe && unsubscribe();
+  };
+},[]);
   return (
     <Wrapper>
       <H1> One Day Wonder </H1>
@@ -173,30 +224,14 @@ export default function Home(){
         <HotSpot>
           <HotSmall> 요즘 핫한 Spot 🔥 </HotSmall>
           <HotFigure>
-            <ImgDiv>
-              <ImgA href="/place">
+            {topThreeData.map((topdata) => (
+              <ImgDiv key={topdata.id}>
+              <Link to={`/place/${topdata.id}`}>
                 <HotImg src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800" />
-                <TextDiv> 인천 <br/> 인천대공원 </TextDiv>
-              </ImgA>
+                <TextDiv> {topdata.name} </TextDiv>
+              </Link>
             </ImgDiv>
-            <ImgDiv>
-              <ImgA href="/place">
-                <HotImg src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800" />
-                <TextDiv> 인천 <br/> 인천대공원 </TextDiv>
-              </ImgA>
-            </ImgDiv>
-            <ImgDiv>
-              <ImgA href="/place">
-                <HotImg src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800" />
-                <TextDiv> 인천 <br/> 인천대공원 </TextDiv>
-              </ImgA>
-            </ImgDiv>
-            <ImgDiv>
-              <ImgA href="/place">
-                <HotImg src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800" />
-                <TextDiv> 인천 <br/> 인천대공원 </TextDiv>
-              </ImgA>
-            </ImgDiv>
+            ))}
           </HotFigure>
         </HotSpot>
       </Grid>
