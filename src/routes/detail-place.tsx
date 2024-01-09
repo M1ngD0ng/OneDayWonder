@@ -1,6 +1,10 @@
 import '@picocss/pico';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { Place } from './home';
+import { doc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const Wrapper = styled.div`
   justify-content: center;
@@ -72,6 +76,16 @@ const MapDiv = styled.div`
     margin-bottom: 5%;
 `;
 export default function Place() {
+    const { id } = useParams();
+    const [placeData, setPlaceData] = useState<Place[]>([]);
+    useEffect(() => {
+        const fetchPlaceData = async () => {
+            try {
+            } catch (e) {
+                console.error(e);
+            }
+        };
+    });
     useEffect(() => {
         const loadGoogleMapsScript = () => {
             const key = import.meta.env.VITE_APP_MAPS_API_KEY;
