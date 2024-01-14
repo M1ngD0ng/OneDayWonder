@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import Modal from 'react-modal';
 import { useEffect, useRef, useState } from "react";
+import { auth } from "../firebase";
 
 
 interface ItemDetail{
@@ -194,7 +195,7 @@ export default function Like(){
   const el=useRef<HTMLDivElement>(null);
   const [modalIsOpen, setModalIsOpen]=useState(false);
   const [modalContent, setModalContent]=useState<ItemDetail | null>(null);
-  
+  const user=auth.currentUser;
   const openModalWithContent=(content:ItemDetail)=>{
     setModalContent(content);
     setModalIsOpen(true);
@@ -261,7 +262,7 @@ export default function Like(){
     <Wrapper>
       <Upper>
         <Info>
-          <Name>이민정</Name>&nbsp;
+          <Name>{user?.displayName ?? "사용자"}</Name>&nbsp;
           <span>님의 "To Go List"</span>
         </Info>
         <Order>
@@ -284,7 +285,7 @@ export default function Like(){
         <Category>
           <div>
           <span>✅</span>&nbsp;
-          <Name>이민정</Name>&nbsp;
+          <Name>{user?.displayName ?? "사용자"}</Name>&nbsp;
           <span>님이 좋아할 만한 장소</span>
           </div>
           </Category>

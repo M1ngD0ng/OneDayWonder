@@ -3,6 +3,7 @@ import styled from "styled-components"
 import Dots from "../components/layout/dots"; 
 import DetailPlan from "../components/detail-plan";
 import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
 
 const Wrapper=styled.div` //최상단 태그 , 배경색 설정
   height: 100%;
@@ -75,7 +76,7 @@ const AI=styled.span`
 export default function MyPlan(){
   const [isPlaned, setIsPlaned]=useState(false);
   const navigate=useNavigate();
-  
+  const user=auth.currentUser;
   const goToCreatePlan=()=>{
     navigate("/create-plan");
   };
@@ -84,7 +85,7 @@ export default function MyPlan(){
     <Wrapper>
       <Upper>
         <Info>
-          <p><Name>이민정</Name>&nbsp;
+          <p><Name>{user?.displayName?? "사용자"}</Name>&nbsp;
             <span>님, 오늘의 일정</span></p>
             <p><span>2023년 12월 23일 토요일</span></p>
         </Info> 
