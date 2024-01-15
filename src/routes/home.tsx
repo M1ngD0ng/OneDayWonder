@@ -144,7 +144,7 @@ const TextDiv = styled.div`
   font-size: 25px;
   font-weight: 500;
 `;
-export interface Place {
+export interface IPlace {
   id: string;
   address: string;
   lat: number;
@@ -161,7 +161,7 @@ export interface Place {
 export default function Home(){
   const navigate = useNavigate();
   const [isTodays, setTodays]=useState(true);
-  const [topThreeData, setTopThreeData] = useState<Place[]>([]);
+  const [topThreeData, setTopThreeData] = useState<IPlace[]>([]);
   const onPlanClick = async () => {
     try {
       navigate("/myplan");
