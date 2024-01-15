@@ -16,6 +16,8 @@ import reset from "styled-reset";
 import CreatePlan from "./routes/createPlan";
 import Place from "./routes/detail-place";
 import Search from "./routes/search";
+import { Provider } from "react-redux";
+
 
 const router = createBrowserRouter([
   {

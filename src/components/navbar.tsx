@@ -9,16 +9,17 @@ const Wapper=styled.div`
 `;
 const StyledNavLink = styled(NavLink)`
   svg {
-    stroke: #ff9500; // 기본 색상
+    stroke: #8A2BE2; // 기본 색상
   }
 
   &.active svg {
-    fill: #ff9500;
+    fill: #8A2BE2;
     fill-opacity: 20%;
   }
 `;
 const Nav=styled.div`
-  border-top: 1px solid #ff9500;
+  
+  border-top: 1px solid #892be281;
   background-color: white;
   position: fixed;
   top: 90%;
@@ -38,7 +39,7 @@ const Nav=styled.div`
 
     svg{
       width: 40px; 
-      stroke: #ff9500;
+      stroke: #8A2BE2;
     }
  
     /* &.log-out{

@@ -8,7 +8,7 @@ const Wrapper=styled.div`
   height: 100%;
   flex-direction: column;
   display: flex;
-  background-color: #ff9500;
+  background-color: #9B4DE3;
   position: fixed;
   overflow-y: auto;
  `;
@@ -35,6 +35,7 @@ const Search = styled.div`
   margin-right: 5%;
   background-color: white;
   border-radius: 50px;
+  box-shadow: 1px 2px 3px purple;
 `;
 const SearchInput = styled.input`
   border: 0px;
@@ -60,7 +61,7 @@ const SearchBtn = styled.button`
     outline: none;
   }
   svg {
-    color: #ff9500;
+    color: #8A2BE2;
     height: 30px;
   }
 `;
@@ -75,11 +76,11 @@ const Today = styled.div`
   padding-bottom: 3%;
   display: flex;
   flex-direction: column;
-  box-shadow: 0px 5px 5px orange;
+  box-shadow: 1px 2px 3px purple;
 `;
 const Small = styled.small`
   font-size: 25px;
-  color: #ff9500;
+  color: #8A2BE2;
   font-weight: 600;
 `;
 const TodayBtn = styled.button`
@@ -87,14 +88,15 @@ const TodayBtn = styled.button`
   margin-top: 5%;
   margin-left: 30%;
   margin-right: 30%;
-  background-color: #ff9500;
+  background-color: #9B4DE3;
+  box-shadow: 1px 2px 3px lightgrey;
   color: white;
   border: 0px;
   border-radius: 10px;
 `;
 const NoPlan = styled.small`
   margin-top: 5%;
-  color: #ff9500;
+  color: #8A2BE2;
   font-weight: 400;
 `;
 const HotSpot = styled.div`
@@ -128,7 +130,7 @@ const HotImg = styled.img`
   width: 250px;
   height: 250px;
   border-radius: 10px;
-  box-shadow: 0px 5px 5px white;
+  box-shadow: 1px 2px 3px purple;
 `;
 const TextDiv = styled.div`
   position: absolute;
