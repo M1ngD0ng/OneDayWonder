@@ -2,8 +2,8 @@ import '@picocss/pico';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Place } from './home';
-import { doc } from 'firebase/firestore';
+import { IPlace } from './home';
+import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 const Wrapper = styled.div`
@@ -76,16 +76,6 @@ const MapDiv = styled.div`
     margin-bottom: 5%;
 `;
 export default function Place() {
-    const { id } = useParams();
-    const [placeData, setPlaceData] = useState<Place[]>([]);
-    useEffect(() => {
-        const fetchPlaceData = async () => {
-            try {
-            } catch (e) {
-                console.error(e);
-            }
-        };
-    });
     useEffect(() => {
         const loadGoogleMapsScript = () => {
             const key = import.meta.env.VITE_APP_MAPS_API_KEY;
@@ -97,7 +87,8 @@ export default function Place() {
             script.onload = initMap;
         };
         const initMap = () => {
-            const myLatLng = { lat: 37.5665, lng: 126.978 };
+            if (!placeData) return;
+            const myLatLng = { lat: placeData.lat, lng: placeData.lng };
             const map = new window.google.maps.Map(document.getElementById('map'), {
                 center: myLatLng,
                 zoom: 17,
@@ -105,21 +96,21 @@ export default function Place() {
             new google.maps.Marker({
                 position: myLatLng,
                 map,
-                title: "Hello World!",
+                title: placeData.name,
               });
         };
         loadGoogleMapsScript();
-    }, []);
+    }, [placeData]);
     return(
         <Wrapper>
             <Img src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800" />
-            <H1> 인천대공원 </H1>
+            <H1> {placeData?.name} </H1>
             <ReviewDiv>
-                <ReviewP> 주차장이 넓어요 </ReviewP>
-                <ReviewP> 맛집이 있어요 </ReviewP>
-                <ReviewP> 너무 복잡해요 </ReviewP>
-                <ReviewP> 여러 가구를 볼 수 있어요 </ReviewP>
-                <ReviewP> 사람이 너무 많아요 </ReviewP>
+                <ReviewP> 별점 : {placeData?.rating} </ReviewP>
+                <ReviewP> 별점 : {placeData?.rating} </ReviewP>
+                <ReviewP> 별점 : {placeData?.rating} </ReviewP>
+                <ReviewP> 별점 : {placeData?.rating} </ReviewP>
+                <ReviewP> 별점 : {placeData?.rating} </ReviewP>
             </ReviewDiv>
             <TagDiv>
                 <TagA href='#'> #광명 </TagA>
@@ -127,7 +118,7 @@ export default function Place() {
                 <TagA href='#'> #맛집 </TagA>
                 <TagA href='#'> #핫플 </TagA>
             </TagDiv>
-            <H3> 위치 : 경기도 광명시 일직동 </H3>
+            <H3> 위치 : {placeData?.address} </H3>
             <MapDiv id="map"></MapDiv>
         </Wrapper>
     );

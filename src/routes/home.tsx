@@ -1,7 +1,12 @@
 import { styled } from "styled-components";
 import '@picocss/pico';
 import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import TodaysPlan from "../components/todaysplan";
+import { Link, useNavigate } from "react-router-dom";
+import { db } from "../firebase";
+import { collection, doc, getDocs, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { Unsubscribe } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import { collection, doc, getDocs, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
@@ -144,24 +149,10 @@ const TextDiv = styled.div`
   font-size: 25px;
   font-weight: 500;
 `;
-export interface Place {
-  id: string;
-  address: string;
-  lat: number;
-  liked: number;
-  lng: number;
-  name: string;
-  phoneNumber: string;
-  picked: number;
-  placeId: string;
-  rating: number;
-  types: string;
-  url: string;
-}
+
 export default function Home(){
   const navigate = useNavigate();
   const [isTodays, setTodays]=useState(true);
-  const [topThreeData, setTopThreeData] = useState<Place[]>([]);
   const onPlanClick = async () => {
     try {
       navigate("/myplan");
