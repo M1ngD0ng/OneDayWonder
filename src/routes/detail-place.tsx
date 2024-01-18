@@ -20,10 +20,20 @@ const Img = styled.img`
 `;
 const H1 = styled.h1`
     color: #8A2BE2;
-    font-size: 35px;
-    font-weight: bolder;
     text-align: center;
     margin-top: 5%;
+    margin-left: 8%;
+    margin-right: 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    #name {
+        font-size: 35px;
+        font-weight: bolder;
+    }
+    #like {
+        font-size: 20px;
+    }
 `;
 const ReviewDiv = styled.div`
     background-color: #9B4DE3;
@@ -122,19 +132,19 @@ export default function Place() {
     return(
         <Wrapper>
             <Img src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800" />
-            <H1> {placeData?.name} </H1>
+            <H1> 
+                <span id='name'>{placeData?.name}</span>
+                <span id='like'> ♡ : {placeData?.liked}</span>
+            </H1>
             <ReviewDiv>
                 <ReviewP> 별점 : {placeData?.rating} </ReviewP>
-                <ReviewP> 별점 : {placeData?.rating} </ReviewP>
-                <ReviewP> 별점 : {placeData?.rating} </ReviewP>
-                <ReviewP> 별점 : {placeData?.rating} </ReviewP>
-                <ReviewP> 별점 : {placeData?.rating} </ReviewP>
+                <ReviewP> 전화번호 : {placeData?.phoneNumber} </ReviewP>
+                <ReviewP> 유형 : {placeData?.types} </ReviewP>
             </ReviewDiv>
             <TagDiv>
-                <TagA href='#'> #광명 </TagA>
-                <TagA href='#'> #쇼핑 </TagA>
-                <TagA href='#'> #맛집 </TagA>
-                <TagA href='#'> #핫플 </TagA>
+                <TagA href='#'> #아직 </TagA>
+                <TagA href='#'> #구현 </TagA>
+                <TagA href='#'> #못함 </TagA>
             </TagDiv>
             <H3> 위치 : {placeData?.address} </H3>
             <MapDiv id="map"></MapDiv>
