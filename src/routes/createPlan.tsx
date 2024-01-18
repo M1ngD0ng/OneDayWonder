@@ -20,7 +20,7 @@ const Lower=styled.div`
   position: relative ;
   overflow-y: scroll;
   padding-top: 5%;
-  margin-bottom: 5%;
+  margin-bottom: 25%;
   ::-webkit-scrollbar {
       display:none;
     }
