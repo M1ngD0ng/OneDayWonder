@@ -4,6 +4,7 @@ import Dots from "./layout/dots";
 import DatePicker from "react-datepicker";
 import TimePicker from "react-time-picker";
 import 'react-datepicker/dist/react-datepicker.css';
+import React from "react";
 
 const Wrapper=styled.div` 
   align-items: center;
@@ -61,6 +62,8 @@ const TagA = styled.div`
   text-decoration: none;
   font-size: 20px;
   box-shadow: 0px 2px 5px grey;
+
+  ${(props) => props.$isSelected && `...props.style`}
 `;
 
 const DatePick= styled(DatePicker)`
@@ -90,7 +93,6 @@ export default function Question(){
     { value: 6, label: '6명' },
     { value: 7, label: '7명 이상' },
   ];
-
   
   const handleSelectPeople = (count) => {
     setSelectedPeople(count);
@@ -109,6 +111,9 @@ export default function Question(){
   const selectedDate = new Date(year, month - 1, day);
 
 
+  const moodOptions1 = ["연인", "친구", "가족모임"];
+  const moodOptions2 = ["파티", "진지한 대화", "조용한"];
+  const moodOptions3 = ["무드있는", "화려한", "역동적인"];
   // const dispatch=useDispatch();
 
   // const handleAnswer=(category, value)=>{
@@ -193,6 +198,39 @@ export default function Question(){
       어떤 분위기의 모임인가요 ?
       </Ques>
       <Ans>
+      <TagDiv>
+        {moodOptions1.map((option) => (
+          <TagA
+            key={option}
+            style={{ fontSize: 'medium'}}
+          >
+            {option}
+          </TagA>
+        ))}
+      </TagDiv>
+
+      <TagDiv>
+        {moodOptions2.map((option) => (
+          <TagA
+            key={option}
+            style={{ marginTop: '1%',
+                    fontSize: 'medium' }} // 원하는 간격을 지정하세요
+          >
+            {option}
+          </TagA>
+        ))}
+      </TagDiv>
+      <TagDiv>
+        {moodOptions3.map((option) => (
+          <TagA
+            key={option}
+            style={{ marginTop: '1%',
+                    fontSize: 'medium' }} // 원하는 간격을 지정하세요
+          >
+            {option}
+          </TagA>
+        ))}
+      </TagDiv>
       </Ans>
     </QuesBlock></> : <></>}
     </Wrapper>

@@ -1,6 +1,5 @@
 import '@picocss/pico';
 import { useState } from 'react';
-import styled from 'styled-components';
 import { auth } from '../firebase';
 import MyPageEdit from '../components/mypage-edit';
 import { useNavigate } from 'react-router-dom';

@@ -1,10 +1,11 @@
 import '@picocss/pico';
 import { useState } from 'react';
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
 import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"; 
 import { A, Button, Div, Form, H1, H2, Input, Label, Wrapper } from '../components/style/style-login';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 export default function Login() {
   const navigate=useNavigate();
@@ -29,7 +30,15 @@ export default function Login() {
     if (isLoading || email === "" || password === "") return;
     try {
       setLoading(true);
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      const userDocRef = doc(db, "users", user.uid);
+      const userSnapshot = await getDoc(userDocRef);
+
+      if (userSnapshot.exists()) {
+        await setDoc(userDocRef, { liked: [] });
+      }
       navigate("/"); // 홈화면으로 이동시킴
     } catch (e) {
       if(e instanceof FirebaseError){
@@ -42,7 +51,15 @@ export default function Login() {
   const onGoogleClick = async () => {
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth,provider);
+      const userCredential = await signInWithPopup(auth,provider);
+      const user = userCredential.user;
+
+      const userDocRef = doc(db, "users", user.uid);
+      const userSnapshot = await getDoc(userDocRef);
+
+      if (userSnapshot.exists()) {
+        await setDoc(userDocRef, { liked: [] });
+      }
       navigate("/");
     } catch (e) {
       console.error(e);
