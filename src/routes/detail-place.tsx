@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { IPlace } from './home';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { auth, db } from '../firebase';
 
 const Wrapper = styled.div`
   justify-content: center;
@@ -88,6 +88,24 @@ const MapDiv = styled.div`
 export default function Place() {
     const { id } = useParams();
     const [placeData, setPlaceData] = useState<IPlace | null>(null);
+    const [isLiked, setIsLiked] = useState(false);
+    const user = auth.currentUser;
+    if (!user) return;
+    useEffect(() => {
+        const checkIfLiked = async () => {
+            try {
+                if (user) {
+                    const userDoc = await getDoc(doc(db,'users',user.uid));
+                    const likedArray = userDoc.data()?.liked || [];
+                    const checkLiked = likedArray.includes(id);
+                    setIsLiked(checkLiked);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        };
+        checkIfLiked();
+    }, [id]);
     useEffect(() => {
         const fetchPlaceData = async () => {
             try {
@@ -129,12 +147,28 @@ export default function Place() {
         };
         loadGoogleMapsScript();
     }, [placeData]);
+    const onLikeClick = async () => {
+        try {
+            const userDoc = await getDoc(doc(db,'users',user.uid));
+            const likedArray = userDoc.data()?.liked || [];
+            if (isLiked) {
+                const updateLikedArray = likedArray.filter((likedId: string) => likedId !== id);
+                await updateDoc(doc(db, 'users', user.uid), { liked: updateLikedArray });
+            } else {
+                const updateLikeArray = [...likedArray, id];
+                await updateDoc(doc(db, 'users', user.uid), { liked: updateLikeArray });
+            }
+            setIsLiked((prevIsLiked) => !prevIsLiked);
+        } catch (e) {
+            console.error(e);
+        }
+    };
     return(
         <Wrapper>
             <Img src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800" />
             <H1> 
                 <span id='name'>{placeData?.name}</span>
-                <span id='like'>♡</span>
+                <span id='like' onClick={onLikeClick}>{isLiked ? '❤️' : '♡'}</span>
             </H1>
             <ReviewDiv>
                 <ReviewP> 별점 : {placeData?.rating} </ReviewP>
