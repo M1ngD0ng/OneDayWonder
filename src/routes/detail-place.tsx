@@ -1,90 +1,11 @@
 import '@picocss/pico';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { IPlace } from './home';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
+import { H1, H3, Img, MapDiv, ReviewDiv, ReviewP, TagA, TagDiv, Wrapper } from '../components/style/style-detailPlace';
 
-const Wrapper = styled.div`
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 90%;
-  position: fixed;
-  overflow-y: auto;
-`;
-const Img = styled.img`
-    width: 100%;
-    height: 30%;
-`;
-const H1 = styled.h1`
-    color: #8A2BE2;
-    text-align: center;
-    margin-top: 5%;
-    margin-left: 8%;
-    margin-right: 8%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    #name {
-        font-size: 35px;
-        font-weight: bolder;
-    }
-    #like {
-        font-size: 20px;
-    }
-`;
-const ReviewDiv = styled.div`
-    background-color: #9B4DE3;
-    margin-left: 5%;
-    margin-right: 5%;
-    margin-top: 5%;
-    border-radius: 30px;
-    padding: 3%;
-    box-shadow: 0px 5px 5px lightgray;
-`;
-const ReviewP = styled.p`
-    margin-top: 2%;
-    padding-left: 5%;
-    color: white;
-    font-size: 25px;
-    font-weight: 500;
-`;
-const TagDiv = styled.div`
-    margin-top: 5%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-`;
-const TagA = styled.a`
-  background-color: #BB91E3;
-  color: white;
-  width: 20%;
-  border-radius: 10px;
-  padding: 3%;
-  margin-left: 2%;
-  margin-right: 2%;
-  text-align: center;
-  text-decoration: none;
-  font-size: 20px;
-  box-shadow: 0px 5px 5px lightgray;
-`;
-const H3 = styled.h3`
-    margin-top: 5%;
-    margin-left: 5%;
-    margin-right: 5%;
-    color: #8A2BE2;
-    font-size: 15px;
-`;
-const MapDiv = styled.div`
-    margin: 5%;
-    width: 90%;
-    height: 200px;
-    border-radius: 10px;
-    margin-bottom: 5%;
-`;
 export default function Place() {
     const { id } = useParams();
     const [placeData, setPlaceData] = useState<IPlace | null>(null);
@@ -172,7 +93,7 @@ export default function Place() {
             </H1>
             <ReviewDiv>
                 <ReviewP> 별점 : {placeData?.rating} </ReviewP>
-                <ReviewP> 전화번호 : {placeData?.phoneNumber} </ReviewP>
+                <ReviewP> 전화번호 : {placeData?.phoneNumber ?? "None"} </ReviewP>
                 <ReviewP> 유형 : {placeData?.types} </ReviewP>
             </ReviewDiv>
             <TagDiv>
