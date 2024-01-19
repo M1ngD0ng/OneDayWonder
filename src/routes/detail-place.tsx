@@ -134,7 +134,7 @@ export default function Place() {
             <Img src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800" />
             <H1> 
                 <span id='name'>{placeData?.name}</span>
-                <span id='like'> ♡ : {placeData?.liked}</span>
+                <span id='like'>♡</span>
             </H1>
             <ReviewDiv>
                 <ReviewP> 별점 : {placeData?.rating} </ReviewP>
