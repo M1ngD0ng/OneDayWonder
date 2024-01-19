@@ -12,7 +12,7 @@ const Wrapper=styled.div`
   overflow-y: visible;
 `;
 const QuesBlock= styled.div`
-  margin-top: 5%;
+  margin-top: 2%;
   padding: 7% 10%;  
   width: 90%;
   background-color: #9B4DE3; 
@@ -48,9 +48,11 @@ const TagDiv = styled.div`
     align-items: center;
     justify-content: center;
 `;
-const TagA = styled.a`
+
+const TagA = styled.div`
   width: max-content;
-  background-color: #BB91E3;
+  background-color: ${(props) => (props.$isSelected ? "#AB6FE3" : "#BB91E3")};
+  font-weight: ${(props) => (props.$isSelected ? "bolder" : "initial")};
   color: white; 
   border-radius: 10px;
   padding: 3% 5%;
@@ -74,8 +76,26 @@ const DatePick= styled(DatePicker)`
   box-shadow: 0px 2px 5px grey;
 `;
 export default function Question(){
+  const [isSelectPeople, setIsSelectPeople] =useState(false);
+  const [selectedPeople, setSelectedPeople] = useState('___');
+
+  const peopleOptions = [
+    { value: 1, label: '1명' },
+    { value: 2, label: '2명' },
+    { value: 3, label: '3명' },
+    { value: 4, label: '4명' },
+  ];
+  const peopleOptionsSecondRow = [
+    { value: 5, label: '5명' },
+    { value: 6, label: '6명' },
+    { value: 7, label: '7명 이상' },
+  ];
+
   
-  const [people, setPeople]=useState(0);
+  const handleSelectPeople = (count) => {
+    setSelectedPeople(count);
+    setIsSelectPeople(true);
+  };
 
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -86,8 +106,8 @@ export default function Question(){
   const [year, setYear] = useState(currentYear);
   const [month, setMonth] = useState(currentMonth);
   const [day, setDay] = useState(currentDay);
-
   const selectedDate = new Date(year, month - 1, day);
+
 
   // const dispatch=useDispatch();
 
@@ -106,26 +126,7 @@ export default function Question(){
     <Wrapper>
     <QuesBlock> 
       <Ques>
-      오늘은 ___ 명이서 하루를 보낼 거에요 !
-      </Ques>
-      <Ans>
-      <TagDiv>
-          <TagA onClick={()=>setPeople(1)}> 1명 </TagA>
-          <TagA onClick={()=>setPeople(2)}> 2명 </TagA>
-          <TagA onClick={()=>setPeople(3)}> 3명 </TagA>
-          <TagA onClick={()=>setPeople(4)}> 4명 </TagA>
-      </TagDiv>
-      <TagDiv>
-          <TagA onClick={()=>setPeople(5)}> 5명 </TagA>
-          <TagA onClick={()=>setPeople(6)}> 6명 </TagA>
-          <TagA onClick={()=>setPeople(7)}> 7명 이상 </TagA>
-      </TagDiv>
-      </Ans>
-    </QuesBlock>
-    <Dots />
-    <QuesBlock> 
-      <Ques>
-      _____ 부터 _____ 까지 놀 거에요!
+      언제 ?? 일정인가요 ?
       </Ques>
       <Ans>
       <TagDiv>
@@ -136,7 +137,7 @@ export default function Question(){
           setDay(date.getDate());
         }}
         selected={selectedDate}
-        dateFormat="yyyy / MM / dd"
+        dateFormat="yyyy . MM . dd"
       />
       </TagDiv>
       </Ans>
@@ -144,23 +145,56 @@ export default function Question(){
     <Dots />
     <QuesBlock> 
       <Ques>
-      _____ 부터 _____ 까지 놀 거에요!
+      어디서 일정을 보내실 건가요 ?
       </Ques>
       <Ans>
       <TagDiv>
-      <DatePick
-        onChange={(date) => {
-          setYear(date.getFullYear());
-          setMonth(date.getMonth() + 1);
-          setDay(date.getDate());
-
-        }}
-        selected={selectedDate}
-        dateFormat="yyyy / MM / dd"
-      />
       </TagDiv>
       </Ans>
     </QuesBlock>
+    
+    <Dots />
+    <QuesBlock> 
+      <Ques>
+      몇 명이 함께하는 일정인가요 ?
+      </Ques>
+      <Ans>
+      <TagDiv>
+        {peopleOptions.map((option) => (
+          <TagA
+            key={option.value}
+            $isSelected={selectedPeople === option.value}
+            onClick={() => handleSelectPeople(option.value)}
+          >
+            {option.label}
+          </TagA>
+        ))}
+      </TagDiv>
+
+      <TagDiv>
+        {peopleOptionsSecondRow.map((option) => (
+          <TagA
+            key={option.value}
+            $isSelected={selectedPeople === option.value}
+            onClick={() => handleSelectPeople(option.value)}
+            style={{ marginTop: '1%' }} // 원하는 간격을 지정하세요
+          >
+            {option.label}
+          </TagA>
+        ))}
+      </TagDiv>
+      </Ans>
+    </QuesBlock>
+    {isSelectPeople && selectedPeople!==1 ?  
+    <>
+    <Dots />
+    <QuesBlock> 
+      <Ques>
+      어떤 분위기의 모임인가요 ?
+      </Ques>
+      <Ans>
+      </Ans>
+    </QuesBlock></> : <></>}
     </Wrapper>
   )
 };

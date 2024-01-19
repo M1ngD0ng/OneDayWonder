@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 import Question from "../components/question";
 import { auth } from "../firebase";
 
-const Wrapper=styled.div` //최상단 태그 , 배경색 설정
+const Wrapper = styled.div` //최상단 태그 , 배경색 설정
   height: 100%;
   width: 100%;
   position: fixed;
@@ -11,22 +11,23 @@ const Wrapper=styled.div` //최상단 태그 , 배경색 설정
   overflow-y: auto;
   background-image: linear-gradient(to bottom, #8A2BE2, white 45%); 
  `;
-const Upper=styled.div`   
-width: 100%;
+const Upper = styled.div`   
+  width: 100%;
+  margin-bottom: 7%;
 `;
 
-const Lower=styled.div`
+const Lower = styled.div`
 
   position: relative ;
   overflow-y: scroll;
   padding-top: 5%;
-  margin-bottom: 25%;
+  margin-bottom: 20%;
   ::-webkit-scrollbar {
       display:none;
     }
 `
 
-const Info=styled.div`
+const Info = styled.div`
   font-size: 25px; 
   flex-direction: column;
   display: flex;
@@ -40,20 +41,20 @@ const Info=styled.div`
     }
   }
 `;
-const Name=styled.span`
+const Name = styled.span`
   font-weight: bold !important; 
 `;
 
-export default function CreatePlan(){
-  const user=auth.currentUser;
-  return(
+export default function CreatePlan() {
+  const user = auth.currentUser;
+  return (
     <Wrapper>
       <Upper>
         <Info>
-          <p><Name>{user?.displayName??"사용자"}</Name>&nbsp;
+          <p><Name>{user?.displayName ?? "사용자"}</Name>&nbsp;
             <span>님</span></p>
-            <p><span>어떤 하루를 원하시나요?</span></p>
-        </Info> 
+          <p><span>어떤 하루를 원하시나요?</span></p>
+        </Info>
       </Upper>
       <Lower>
         <Question></Question>
