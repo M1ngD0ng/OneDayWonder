@@ -30,15 +30,7 @@ export default function Login() {
     if (isLoading || email === "" || password === "") return;
     try {
       setLoading(true);
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      const userDocRef = doc(db, "users", user.uid);
-      const userSnapshot = await getDoc(userDocRef);
-
-      if (userSnapshot.exists()) {
-        await setDoc(userDocRef, { liked: [] });
-      }
+      await signInWithEmailAndPassword(auth, email, password);
       navigate("/"); // 홈화면으로 이동시킴
     } catch (e) {
       if(e instanceof FirebaseError){
@@ -51,15 +43,7 @@ export default function Login() {
   const onGoogleClick = async () => {
     try {
       const provider = new GoogleAuthProvider();
-      const userCredential = await signInWithPopup(auth,provider);
-      const user = userCredential.user;
-
-      const userDocRef = doc(db, "users", user.uid);
-      const userSnapshot = await getDoc(userDocRef);
-
-      if (userSnapshot.exists()) {
-        await setDoc(userDocRef, { liked: [] });
-      }
+      await signInWithPopup(auth,provider);
       navigate("/");
     } catch (e) {
       console.error(e);

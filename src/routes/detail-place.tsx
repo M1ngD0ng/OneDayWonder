@@ -2,7 +2,7 @@ import '@picocss/pico';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { IPlace } from './home';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import { H1, H3, Img, MapDiv, ReviewDiv, ReviewP, TagA, TagDiv, Wrapper } from '../components/style/style-detailPlace';
 
@@ -15,18 +15,20 @@ export default function Place() {
     useEffect(() => {
         const checkIfLiked = async () => {
             try {
-                if (user) {
-                    const userDoc = await getDoc(doc(db,'users',user.uid));
-                    const likedArray = userDoc.data()?.liked || [];
-                    const checkLiked = likedArray.includes(id);
-                    setIsLiked(checkLiked);
+                const userDocRef = doc(db, "users", user.uid);
+                const userSnapshot = await getDoc(userDocRef);
+                if (!userSnapshot.exists()) {
+                    await setDoc(userDocRef, { liked: [] });
                 }
+                const likedArray = userSnapshot.data()?.liked || [];
+                const checkLiked = likedArray.includes(id);
+                setIsLiked(checkLiked);
             } catch (e) {
                 console.error(e);
             }
         };
         checkIfLiked();
-    }, [id]);
+    }, [id, user]);
     useEffect(() => {
         const fetchPlaceData = async () => {
             try {
