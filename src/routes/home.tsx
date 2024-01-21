@@ -1,10 +1,10 @@
 import { styled } from "styled-components";
 import '@picocss/pico';
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import TodaysPlan from "../components/todaysplan";
 import { Link, useNavigate } from "react-router-dom";
 import { db } from "../firebase";
-import { collection, doc, getDocs, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { collection, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { Unsubscribe } from "firebase/auth";
 
 const Wrapper=styled.div`
@@ -30,7 +30,7 @@ const Grid = styled.div`
   flex-direction: column;
   padding-bottom: 10%;
 `;
-const Search = styled.div`
+const Search = styled.form`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -160,8 +160,15 @@ export interface IPlace {
 }
 export default function Home(){
   const navigate = useNavigate();
+  const [searchValue, setSearchValue] = useState("");
   const [isTodays, setTodays]=useState(true);
   const [topThreeData, setTopThreeData] = useState<IPlace[]>([]);
+  const onSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if(searchValue.trim() !== "") {
+      navigate(`/search/${encodeURIComponent(searchValue)}`);
+    }
+  };
   const onPlanClick = async () => {
     try {
       navigate("/myplan");
@@ -208,8 +215,8 @@ export default function Home(){
     <Wrapper>
       <H1> One Day Wonder </H1>
       <Grid className="grid">
-        <Search>
-          <SearchInput type="text" placeholder="가고 싶은 지역/장소를 검색하세요" />
+        <Search onSubmit={onSearchSubmit}>
+          <SearchInput type="text" placeholder="가고 싶은 지역/장소를 검색하세요" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
           <SearchBtn type="submit">
             <svg data-slot="icon" fill="none" strokeWidth={1.5} stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
