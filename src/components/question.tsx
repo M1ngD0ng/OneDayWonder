@@ -1,11 +1,23 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { styled } from "styled-components";
 import Dots from "./layout/dots";
 import DatePicker from "react-datepicker";
 import TimePicker from "react-time-picker";
 import 'react-datepicker/dist/react-datepicker.css';
 import React from "react";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { db } from "../firebase";
 
+// 지역 타입 정의
+interface IRegion {
+  mainReg: string;
+  prior: string;
+  subReg: ISubRegion[];
+}
+
+interface ISubRegion {
+  name: string;
+}
 const Wrapper = styled.div` 
   align-items: center;
   flex-direction: column;
@@ -65,7 +77,7 @@ const TagA = styled.div`
 
   ${(props) => props.$isSelected && `...props.style`}
 `;
-
+ 
 const DatePick = styled(DatePicker)`
   width: max-content;
   background-color: #BB91E3;
@@ -81,9 +93,93 @@ const DatePick = styled(DatePicker)`
   outline: none !important;
   box-shadow: none !important;
 `;
+
+// 스타일드 컴포넌트 정의
+const DropdownContainer = styled.div`
+  position: relative;
+  margin-top: 5%;
+  display: flex;
+  justify-content: center;
+`;
+
+const DropdownList = styled.ul`
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  max-height: 200px; // 최대 높이를 픽셀 또는 다른 단위로 설정
+  overflow-y: scroll; // 스크롤 가능하도록 설정
+  background: white;
+  list-style: none;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transform: translateX(3%);
+`;
+
+
+const Summary=styled.summary`
+  background-color: #BB91E3;
+  outline: none; /* 포커스 테두리 제거 */
+  cursor: pointer; 
+  margin: 0 2%;
+  font-size: medium;
+  border-radius: 10px; /* 드롭다운의 둥근 모서리 */
+
+
+  &:focus {
+    outline: none; /* 포커스 상태일 때 테두리 제거 */
+  }
+`;
 export default function Question() {
+  // 지역 질문
+  const [regionData, setRegionData] = useState<IRegion[]>([]);
+  const [selectedRegion, setSelectedRegion] = useState<IRegion | null>(null);
+  const [subRegions, setSubRegions] = useState<ISubRegion[]>([]);
+  const [selectedSubRegion, setSelectedSubRegion] = useState<ISubRegion | null>(null);
+
+  const detailRef=useRef<HTMLDetailsElement>(null);
+  const subDetailRef=useRef<HTMLDetailsElement>(null);
+
+  const fetchRegionsData = async () => {
+    const q = query(collection(db, "region"),
+      orderBy("prior", "asc"));
+    const querySnapshot = await getDocs(q);
+
+    const regions=querySnapshot.docs.map(doc=>({
+      _id: doc.id,
+      ...doc.data() as IRegion
+    }));
+    setRegionData(regions);
+  }
+  useEffect(() => {
+    fetchRegionsData(); 
+  }, []);
+
+  useEffect(()=>{
+    console.log('sub',subRegions);
+  },[subRegions]);
+
+  const handleSelectMainRegion =(region: IRegion)=>{
+    setSelectedRegion(region);
+    setSubRegions(region.subReg || []);
+    setSelectedSubRegion(null); // 두 번째 드롭다운의 선택을 초기화
+    if (detailRef.current){
+      detailRef.current.removeAttribute('open');
+    }
+  };
+
+  const handleSelectSubRegion =(subRegion: ISubRegion)=>{
+    setSelectedSubRegion(subRegion);
+    if (subDetailRef.current){
+      subDetailRef.current.removeAttribute('open');
+    }
+  };
+
+  useEffect(()=>{
+    console.log(selectedSubRegion);
+  },[selectedSubRegion]);
+  // 인원 질문
   const [isSelectPeople, setIsSelectPeople] = useState(false);
-  const [selectedPeople, setSelectedPeople] = useState('___');
+  const [selectedPeople, setSelectedPeople] = useState(0);
 
   const peopleOptions = [
     { value: 1, label: '1명' },
@@ -102,18 +198,18 @@ export default function Question() {
     setIsSelectPeople(true);
   };
 
+  // 날짜 질문
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
   const currentDay = currentDate.getDate();
 
-  // 각각의 상태 초기화
   const [year, setYear] = useState(currentYear);
   const [month, setMonth] = useState(currentMonth);
   const [day, setDay] = useState(currentDay);
   const selectedDate = new Date(year, month - 1, day);
 
-
+  // 분위기 질문
   const moodOptions1 = ["연인과", "친구와", "가족모임"];
   const moodOptions2 = ["파티", "진지한 대화", "조용한"];
   const moodOptions3 = ["무드있는", "화려한", "역동적인"];
@@ -129,6 +225,7 @@ export default function Question() {
       // 선택되지 않은 옵션이면 선택
       setSelectedOptions([...selectedOptions, option]);
     }
+    regionData.sort((a,b)=>a.prior.localeCompare(b.prior));
   };
   // const dispatch=useDispatch();
 
@@ -169,8 +266,39 @@ export default function Question() {
           어디서 일정을 보내실 건가요 ?
         </Ques>
         <Ans>
-          <TagDiv>
-          </TagDiv>
+          <DropdownContainer>
+            <details ref={detailRef} role="list">
+              <Summary aria-haspopup="listbox" role="button">
+                {selectedRegion ? selectedRegion.mainReg : "Select a region"}
+              </Summary>
+              <DropdownList role="listbox">
+                {regionData.map((region) => (
+                  <li key={region.prior} onClick={() => handleSelectMainRegion(region)}>
+                    {region.mainReg}
+                  </li>
+                ))}
+              </DropdownList>
+            </details>
+          </DropdownContainer>
+          {selectedRegion && selectedRegion.subReg && selectedRegion.subReg.length>0 && (
+            <DropdownContainer >
+            <details ref={subDetailRef} role="list">
+              <Summary aria-haspopup="listbox" role="button">
+              {selectedSubRegion ? selectedSubRegion : "Select a sub region"}
+              </Summary>
+              <DropdownList role="listbox">
+                {selectedRegion.subReg.map((subRegion, index)=>(
+                  <li key={`${subRegion.name}-${index}`} onClick={() => handleSelectSubRegion(subRegion)}>
+                    {subRegion}
+                  </li>
+                ))}
+              </DropdownList>
+            </details>
+          </DropdownContainer>
+          )}
+          
+          
+
         </Ans>
       </QuesBlock>
 
@@ -218,7 +346,7 @@ export default function Question() {
                 key={option}
                 $isSelected={selectedOptions.includes(option)}
                 style={{ fontSize: 'medium' }}
-                onClick={()=>toggleOption(option)}
+                onClick={() => toggleOption(option)}
               >
                 {option}
               </TagA>
@@ -234,7 +362,7 @@ export default function Question() {
                   marginTop: '1%',
                   fontSize: 'medium'
                 }} // 원하는 간격을 지정하세요
-                onClick={()=>toggleOption(option)}
+                onClick={() => toggleOption(option)}
               >
                 {option}
               </TagA>
@@ -249,7 +377,7 @@ export default function Question() {
                   marginTop: '1%',
                   fontSize: 'medium'
                 }} // 원하는 간격을 지정하세요
-                onClick={()=>toggleOption(option)}
+                onClick={() => toggleOption(option)}
               >
                 {option}
               </TagA>
