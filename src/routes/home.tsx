@@ -1,5 +1,5 @@
 import '@picocss/pico';
-import React, { useEffect, useState } from "react";
+import React, React, { useEffect, useState } from "react";
 import TodaysPlan from "../components/todaysplan";
 import { Link, useNavigate } from "react-router-dom";
 import { db } from "../firebase";
