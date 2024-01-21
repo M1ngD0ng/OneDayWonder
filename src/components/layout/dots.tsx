@@ -12,12 +12,12 @@ const Dot1=styled.p`
 const Dot2=styled.p`
   font-size: larger;
   font-weight: 700;
-  padding-top: 3%;
+  padding-top: 2%;
 `;
 const Dot3=styled.p`
   font-size: larger;
   font-weight: 500;
-  padding-top: 3%;
+  padding-top: 2%;
 `;
 
 export default function Dots(){

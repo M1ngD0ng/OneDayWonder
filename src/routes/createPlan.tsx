@@ -21,7 +21,7 @@ const Lower = styled.div`
   position: relative ;
   overflow-y: scroll;
   padding-top: 5%;
-  margin-bottom: 20%;
+  margin-bottom: 25%;
   ::-webkit-scrollbar {
       display:none;
     }
