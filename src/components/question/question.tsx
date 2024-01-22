@@ -90,12 +90,17 @@ export default function Question() {
     } 
     try {
       const newDoc={
+        user_id: user?.uid,
         location: selectedAnswers.location,
         date: selectedAnswers.date,
         people: selectedAnswers.people,
         mood: selectedAnswers.mood,
       };
-      await addDoc(collection(db, "quesAnswer"),newDoc);
+      const combinedDate= `${selectedAnswers.date[0]}_${selectedAnswers.date[1]}_${selectedAnswers.date[2]}`;
+      
+      const userCollectionRef=collection(db, "quesAnswer", user?.uid,combinedDate);
+
+      await addDoc(userCollectionRef,newDoc);
       navigate("/myplan");
       console.log("데이터 추가 완료!");
     } catch (e) {
