@@ -57,7 +57,7 @@ const DateSelection = ({$updateAnswer}) => {
     <>
     <QuesBlock>
         <Ques>
-          언제 ?? 일정인가요 ?
+          일정 추천을 원하시는 날짜를 알려주세요 !
         </Ques>
         <Ans>
           <TagDiv>
