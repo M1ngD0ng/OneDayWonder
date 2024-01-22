@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import Question from "../components/question";
+import Question from "../components/question/question";
 import { auth } from "../firebase";
 
 const Wrapper = styled.div` //최상단 태그 , 배경색 설정
