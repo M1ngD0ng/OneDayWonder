@@ -1,16 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import Dots from "../layout/dots";
-import DatePicker from "react-datepicker";
-import TimePicker from "react-time-picker";
-import 'react-datepicker/dist/react-datepicker.css';
-import React from "react";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
-import { db } from "../../firebase";
 import LocationSelection from "./location-selection";
 import PeopleSelection from "./people-selection";
 import DateSelection from "./date-selection";
 import MoodSelection from "./mood-selection";
+import { auth, db } from "../../firebase";
+import { addDoc, collection } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+
 
 const Wrapper = styled.div` 
   align-items: center;
@@ -49,13 +47,30 @@ export const Ans = styled.div`
   font-weight: bolder;
 `;
 
+const Alert=styled.div`
+  margin-top: 6%;
+  font-weight: bold;
+`;
+
+const Button =styled.button`
+  margin-top: 6%;
+  box-shadow: 1px 2px 3px grey;
+  border-color: #9B4DE3;
+  border-radius: 20px;
+  width: max-content;
+  font-size: large;
+  background-color: #BB91E3;
+`;
 export default function Question() {
+  const navigate=useNavigate();
   const [selectedAnswers, setSelectedAnswers] = useState({
     location: null,
-    date: null,
+    date: [],
     people: null,
     mood: [],
   });
+  const [isSelectComplete, setIsSelectComplete]=useState(true);
+  const user=auth.currentUser;
 
   const updateAnswer = (category, value) => {
     setSelectedAnswers((prevAnswers) => ({
@@ -63,21 +78,30 @@ export default function Question() {
       [category]: value,
     }));
   };
-
+  useEffect(() => {
+    console.log(selectedAnswers);
+  }, [selectedAnswers]);
   
-  // const dispatch=useDispatch();
-
-  // const handleAnswer=(category, value)=>{
-  //   dispatch(updateAnswer({category, value}));
-
-  // // Firebase 데이터베이스 경로 설정
-  // const answerRef = ref(db, 'selections/' + category);
-
-  // // Firebase 데이터베이스에 데이터 저장
-  // set(answerRef, value).catch((error) => {
-  //   console.error("Firebase 데이터 저장 실패: ", error);
-  // });
-  // };
+  const answerSubmit=async(e:React.FormEvent<HTMLFormElement>)=>{
+    e.preventDefault();
+    if(selectedAnswers.location==null || selectedAnswers.date.length===0 || selectedAnswers.people==null || selectedAnswers.mood.length===0){
+      setIsSelectComplete(false);
+      return;
+    } 
+    try {
+      const newDoc={
+        location: selectedAnswers.location,
+        date: selectedAnswers.date,
+        people: selectedAnswers.people,
+        mood: selectedAnswers.mood,
+      };
+      await addDoc(collection(db, "quesAnswer"),newDoc);
+      navigate("/myplan");
+      console.log("데이터 추가 완료!");
+    } catch (e) {
+      console.log(e);
+    }  
+  };
   return (
     <Wrapper>
       <DateSelection $updateAnswer={updateAnswer}/>
@@ -87,6 +111,15 @@ export default function Question() {
       <PeopleSelection $updateAnswer={updateAnswer}/>
       <Dots />
       <MoodSelection $updateAnswer={updateAnswer}/>
+      {isSelectComplete? <></>: 
+      <Alert>
+        ❌ 선택하지 않은 항목이 있습니다. ❌
+      </Alert>
+      }
+      <Button onClick={answerSubmit}>
+       ✔️ Create A Plan Now
+      </Button>
+      
     </Wrapper>
   )
 };

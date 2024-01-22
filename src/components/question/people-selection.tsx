@@ -1,5 +1,5 @@
 // PeopleSelection.tsx (인원 선택 관련 컴포넌트)
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Ans, Ques, QuesBlock } from "./question";
 
@@ -26,7 +26,7 @@ const TagA = styled.div`
   box-shadow: 0px 2px 5px grey;
 `;
 
-const PeopleSelection = () => {
+const PeopleSelection = ({$updateAnswer}) => {
    // 인원 질문
    const [isSelectPeople, setIsSelectPeople] = useState(false);
    const [selectedPeople, setSelectedPeople] = useState(0);
@@ -47,6 +47,10 @@ const PeopleSelection = () => {
      setSelectedPeople(count);
      setIsSelectPeople(true);
    };
+
+   useEffect(()=>{
+    $updateAnswer("people",selectedPeople);
+   },[selectedPeople]);
   // 인원 선택과 관련된 상태 및 로직을 이곳에 작성
   return (
     <>

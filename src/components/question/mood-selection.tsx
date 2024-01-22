@@ -1,5 +1,5 @@
 // MoodSelection.tsx (분위기 선택 관련 컴포넌트)
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Ans, Ques, QuesBlock } from "./question";
 
@@ -26,7 +26,7 @@ const TagA = styled.div`
   box-shadow: 0px 2px 5px grey;
 `;
 
-const MoodSelection = () => {
+const MoodSelection = ({$updateAnswer}) => {
   // 분위기 질문
   const moodOptions1 = ["연인과", "친구와", "가족모임"];
   const moodOptions2 = ["파티", "진지한 대화", "조용한"];
@@ -44,6 +44,9 @@ const MoodSelection = () => {
       setSelectedOptions([...selectedOptions, option]);
     }
   };
+  useEffect(()=>{
+    $updateAnswer("mood",selectedOptions);
+  },[selectedOptions]);
   // 분위기 선택과 관련된 상태 및 로직을 이곳에 작성
   return (
     <>

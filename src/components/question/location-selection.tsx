@@ -60,7 +60,7 @@ const Summary=styled.summary`
   }
 `;
 
-const LocationSelection = () => {
+const LocationSelection = ({$updateAnswer}) => {
   // 지역 질문
   const [regionData, setRegionData] = useState<IRegion[]>([]);
   const [selectedRegion, setSelectedRegion] = useState<IRegion | null>(null);
@@ -86,10 +86,6 @@ const LocationSelection = () => {
     fetchRegionsData(); 
   }, []);
 
-  useEffect(()=>{
-    console.log('sub',subRegions);
-  },[subRegions]);
-
   const handleSelectMainRegion =(region: IRegion)=>{
     setSelectedRegion(region);
 
@@ -105,12 +101,15 @@ const LocationSelection = () => {
     if (subDetailRef.current){
       subDetailRef.current.removeAttribute('open');
     }
+    
+    
   };
-
   useEffect(()=>{
-    console.log(subRegions);
-  },[subRegions]);
-  // 지역 선택과 관련된 상태 및 로직을 이곳에 작성
+    if (selectedRegion){
+      const combinedRegion = `${selectedRegion.mainReg || ""} ${selectedSubRegion || ""}`;
+      $updateAnswer("location", combinedRegion);
+    }
+  },[selectedSubRegion]);
   return (
     <>
       <QuesBlock>
@@ -121,7 +120,7 @@ const LocationSelection = () => {
           <DropdownContainer>
             <details ref={detailRef} role="list">
               <Summary aria-haspopup="listbox" role="button">
-                {selectedRegion ? selectedRegion.mainReg : "Select a region"}
+                {selectedRegion ? selectedRegion.mainReg : "Select A Region"}
               </Summary>
               <DropdownList role="listbox">
                 {regionData.map((region) => (
@@ -136,7 +135,7 @@ const LocationSelection = () => {
             <DropdownContainer >
             <details ref={subDetailRef} role="list">
               <Summary aria-haspopup="listbox" role="button">
-              {selectedSubRegion ? selectedSubRegion : "Select a sub region"}
+              {selectedSubRegion ? selectedSubRegion : "Select A Sub Region"}
               </Summary>
               <DropdownList role="listbox">
                 {selectedRegion.subReg.map((subRegion, index)=>(

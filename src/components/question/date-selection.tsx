@@ -1,5 +1,5 @@
 // DateSelection.tsx (날짜 선택 관련 컴포넌트)
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -30,7 +30,7 @@ const DatePick = styled(DatePicker)`
   box-shadow: none !important;
 `;
 
-const DateSelection = () => {
+const DateSelection = ({$updateAnswer}) => {
   // 날짜 질문
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -42,7 +42,17 @@ const DateSelection = () => {
   const [day, setDay] = useState(currentDay);
   const selectedDate = new Date(year, month - 1, day);
 
-  // 날짜 선택과 관련된 상태 및 로직을 이곳에 작성
+  // 날짜가 변경될 때마다 부모 컴포넌트에 선택한 날짜를 업데이트합니다.
+  const handleDateChange = (date) => {
+    setYear(date.getFullYear());
+    setMonth(date.getMonth() + 1);
+    setDay(date.getDate());
+    
+  };
+  useEffect(()=>{
+    $updateAnswer("date", [year,month,day]); // 선택한 날짜를 부모 컴포넌트로 전달
+  },[year,month,day])
+
   return (
     <>
     <QuesBlock>
@@ -52,11 +62,7 @@ const DateSelection = () => {
         <Ans>
           <TagDiv>
             <DatePick
-              onChange={date => {
-                setYear(date.getFullYear());
-                setMonth(date.getMonth() + 1);
-                setDay(date.getDate());
-              }}
+              onChange={handleDateChange}
               selected={selectedDate}
               dateFormat="yyyy . MM . dd"
             />
