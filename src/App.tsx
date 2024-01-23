@@ -48,7 +48,7 @@ const router = createBrowserRouter([
         element: <Place />,
       },
       {
-        path: "/search",
+        path: "/search/:value",
         element: <Search />,
       },
       {
