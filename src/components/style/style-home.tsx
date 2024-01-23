@@ -126,6 +126,7 @@ export const ImgDiv = styled.div`
 export const HotImg = styled.img`
   width: 250px;
   height: 250px;
+  border-radius: 10px;
 `;
 export const TextDiv = styled.div`
   position: absolute;
