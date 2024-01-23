@@ -10,6 +10,7 @@ export interface IPlace {
   id: string;
   address: string;
   name: string;
+  photo_url: string;
 }
 
 const Content = styled.div`
@@ -30,13 +31,30 @@ const Onediv = styled.div`
   height: fit-content;
   padding: 4%; 
   background-color: white;
-  img {
+  /* img {
     width: 20%;
-    border-radius: 10px; 
+    height: 100%; // 높이를 요소의 높이만큼 지정합니다.
+    border-radius: 10px;
     float: left;
+    object-fit: cover; // 이미지를 요소의 크기에 맞춰서 크롭합니다.
+  } */
+  .image-container {
+    width: 80px;
+    height: 80px;
+    overflow: hidden; // 컨테이너 밖으로 나가는 이미지 숨기기
+    border-radius: 10px; // 필요하다면 둥근 모서리 설정
   }
-  div{
-    width: 70%;
+    
+  .image-container img {
+    width: auto; // 원본 비율 유지를 위해 auto 설정
+    min-width: 100%; // 최소 너비를 컨테이너와 같게 설정
+    height: 100%; // 높이를 컨테이너와 같게 설정
+    object-fit: cover; // 이미지가 컨테이너를 넘칠 경우 잘라냄
+    object-position: center; // 이미지의 가로 중앙이 항상 보이도록 설정
+  }
+
+  .content-container{
+    width: 60%;
   }
   h3{
     font-weight: bold;
@@ -73,7 +91,7 @@ export default function LikedList() {
               const placeRef=doc(db,"sample",placeId);
               const placeSnap=await getDoc(placeRef);
               if (placeSnap.exists()){
-                return { id: placeId, address: placeSnap.data().address, name: placeSnap.data().name};
+                return { id: placeId, address: placeSnap.data().address, name: placeSnap.data().name, photo_url: placeSnap.data().photo_url };
               } else{
                 return null;
               }
@@ -108,7 +126,10 @@ export default function LikedList() {
   const renderLikedPlaces = () => {
     return likedPlaces.map(place => (
       <Onediv key={place.id} onClick={()=>onPlaceClick(place.id)}>
-        <div>
+        <div className="image-container">
+          <img src={place.photo_url} />
+        </div>
+        <div className="content-container">
           <h3>{place.name}</h3>
           <p>{place.address}</p>
         </div>
