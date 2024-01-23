@@ -88,14 +88,14 @@ export default function Place() {
     };
     return(
         <Wrapper>
-            <Img src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800" />
+            <Img src={placeData?.photo_url} />
             <H1> 
                 <span id='name'>{placeData?.name}</span>
                 <span id='like' onClick={onLikeClick}>{isLiked ? '❤️' : '♡'}</span>
             </H1>
             <ReviewDiv>
                 <ReviewP> 별점 : {placeData?.rating} </ReviewP>
-                <ReviewP> 전화번호 : {placeData?.phoneNumber ?? "None"} </ReviewP>
+                <ReviewP> 전화번호 : {placeData?.phone_number ?? "None"} </ReviewP>
                 <ReviewP> 유형 : {placeData?.types} </ReviewP>
             </ReviewDiv>
             <TagDiv>

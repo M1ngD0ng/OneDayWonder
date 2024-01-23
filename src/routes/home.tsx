@@ -10,13 +10,15 @@ import { Grid, H1, HotFigure, HotImg, HotSmall, HotSpot, ImgDiv, NoPlan, Search,
 export interface IPlace {
   id: string;
   address: string;
+  keywords: string;
   lat: number;
   liked: number;
   lng: number;
   name: string;
-  phoneNumber: string;
+  phone_number: string;
+  photo_url: string;
   picked: number;
-  placeId: string;
+  place_id: string;
   rating: number;
   types: string;
   url: string;
@@ -50,16 +52,18 @@ export default function Home(){
       );
       unsubscribe = await onSnapshot(q, (snapshot) => {
         const qdata = snapshot.docs.map((doc) => {
-          const { address, lat, liked, lng, name, phoneNumber, picked, placeId, rating, types, url } = doc.data();
+          const { address, keywords, lat, liked, lng, name, phone_number, photo_url, picked, place_id, rating, types, url } = doc.data();
           return {
             address,
+            keywords,
             lat,
             liked,
             lng,
             name,
-            phoneNumber,
+            phone_number,
+            photo_url,
             picked,
-            placeId,
+            place_id,
             rating,
             types,
             url,
@@ -97,7 +101,7 @@ export default function Home(){
             {topThreeData.map((topdata) => (
               <ImgDiv key={topdata.id}>
               <Link to={`/place/${topdata.id}`}>
-                <HotImg src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800" />
+                <HotImg src={topdata.photo_url} />
                 <TextDiv> {topdata.name} </TextDiv>
               </Link>
             </ImgDiv>
