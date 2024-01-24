@@ -28,7 +28,6 @@ export default function Search() {
           const keywordsData = keywordsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
           const sortedResults = (keywordsData as IPlace[]).sort((a,b) => b.rating - a.rating);
           setSearchResults(sortedResults);
-          console.log(searchResults);
         } catch (e) {
           console.log(e);
         }

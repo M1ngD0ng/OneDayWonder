@@ -2,7 +2,7 @@ import '@picocss/pico';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { IPlace } from './home';
-import { Timestamp, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { FieldValue, Firestore, Timestamp, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import { H1, H3, Img, MapDiv, ReviewDiv, ReviewP, TagA, TagDiv, Wrapper } from '../components/style/style-detailPlace';
 import firebase from 'firebase/compat/app';
@@ -99,11 +99,21 @@ export default function Place() {
             if(!user || !id) return;
             const userDoc = await getDoc(doc(db,'users',user.uid));
             const likedArray: ILikedItem[] = userDoc.data()?.liked || [];
+            const placedocRef = doc(db,'sample', id);
+            const placedocSnap = await getDoc(placedocRef);
+            const pData = placedocSnap.data();
+            const placeLiked = pData?.liked || 0;
             if (isLiked) {
                 const updateLikedArray = likedArray.filter((likedItem) => likedItem.liked_id !== id);
                 await updateDoc(doc(db, 'users', user.uid), { liked: updateLikedArray });
+                await updateDoc(placedocRef, {
+                    liked: placeLiked - 1
+                });
             } else {
                 await addToLikedArray(user.uid, id);
+                await updateDoc(placedocRef, {
+                    liked: placeLiked + 1
+                });
             }
             setIsLiked((prevIsLiked) => !prevIsLiked);
         } catch (e) {
