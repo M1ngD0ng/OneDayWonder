@@ -2,10 +2,34 @@ import '@picocss/pico';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { IPlace } from './home';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { Timestamp, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import { H1, H3, Img, MapDiv, ReviewDiv, ReviewP, TagA, TagDiv, Wrapper } from '../components/style/style-detailPlace';
+import firebase from 'firebase/compat/app';
+export interface ILikedItem {
+    liked_id: string;
+    likedAt: firebase.firestore.Timestamp;
+}
+const addToLikedArray = async (userId: string, itemId: string) => {
+    try {
+        const userDocRef = doc(db, 'users', userId);
+        const userDoc = await getDoc(userDocRef);
 
+        if (userDoc.exists()) {
+            const likedArray = userDoc.data()?.liked || [];
+            const updateLikedArray = [
+                ...likedArray,
+                {
+                    liked_id: itemId,
+                    likedAt: Timestamp.now(),
+                },
+            ];
+            await updateDoc(userDocRef, { liked: updateLikedArray });
+        }
+    } catch (e) {
+        console.error(e);
+    }
+};
 export default function Place() {
     const { id } = useParams();
     const [placeData, setPlaceData] = useState<IPlace | null>(null);
@@ -72,14 +96,14 @@ export default function Place() {
     }, [placeData]);
     const onLikeClick = async () => {
         try {
+            if(!user || !id) return;
             const userDoc = await getDoc(doc(db,'users',user.uid));
-            const likedArray = userDoc.data()?.liked || [];
+            const likedArray: ILikedItem[] = userDoc.data()?.liked || [];
             if (isLiked) {
-                const updateLikedArray = likedArray.filter((likedId: string) => likedId !== id);
+                const updateLikedArray = likedArray.filter((likedItem) => likedItem.liked_id !== id);
                 await updateDoc(doc(db, 'users', user.uid), { liked: updateLikedArray });
             } else {
-                const updateLikeArray = [...likedArray, id];
-                await updateDoc(doc(db, 'users', user.uid), { liked: updateLikeArray });
+                await addToLikedArray(user.uid, id);
             }
             setIsLiked((prevIsLiked) => !prevIsLiked);
         } catch (e) {
