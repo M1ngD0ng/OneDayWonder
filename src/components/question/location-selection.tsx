@@ -7,13 +7,9 @@ import { db } from "../../firebase";
 
 // 지역 타입 정의
 interface IRegion {
-  mainReg: string;
+  station: string;
   prior: string;
-  subReg: ISubRegion[];
-}
-
-interface ISubRegion {
-  name: string;
+  initial: string;
 }
 
 // 스타일드 컴포넌트 정의
@@ -64,52 +60,52 @@ const LocationSelection = ({$updateAnswer}) => {
   // 지역 질문
   const [regionData, setRegionData] = useState<IRegion[]>([]);
   const [selectedRegion, setSelectedRegion] = useState<IRegion | null>(null);
-  const [subRegions, setSubRegions] = useState<ISubRegion[]>([]);
-  const [selectedSubRegion, setSelectedSubRegion] = useState<ISubRegion | null>(null);
+ // const [subRegions, setSubRegions] = useState<ISubRegion[]>([]);
+ // const [selectedSubRegion, setSelectedSubRegion] = useState<ISubRegion | null>(null);
 
   const detailRef=useRef<HTMLDetailsElement>(null);
-  const subDetailRef=useRef<HTMLDetailsElement>(null);
+  //const subDetailRef=useRef<HTMLDetailsElement>(null);
 
   const fetchRegionsData = async () => {
-    const q = query(collection(db, "region"),
-      orderBy("prior", "asc"));
+    const q = query(collection(db, "regions"),
+      orderBy("prior","asc"));
     const querySnapshot = await getDocs(q);
 
     const regions=querySnapshot.docs.map(doc=>({
       _id: doc.id,
       ...doc.data() as IRegion
     }));
-
+    console.log(regions);
     setRegionData(regions);
   }
   useEffect(() => {
     fetchRegionsData(); 
   }, []);
 
-  const handleSelectMainRegion =(region: IRegion)=>{
+  const handleSelectstation =(region: IRegion)=>{
     setSelectedRegion(region);
 
-    setSubRegions(region.subReg || []);
-    setSelectedSubRegion(null); // 두 번째 드롭다운의 선택을 초기화
+    // setSubRegions(region.subReg || []);
+    // setSelectedSubRegion(null); // 두 번째 드롭다운의 선택을 초기화
     if (detailRef.current){
       detailRef.current.removeAttribute('open');
     }
   };
 
-  const handleSelectSubRegion =(subRegion: ISubRegion)=>{
-    setSelectedSubRegion(subRegion);
-    if (subDetailRef.current){
-      subDetailRef.current.removeAttribute('open');
-    }
+  // const handleSelectSubRegion =(subRegion: ISubRegion)=>{
+  //   setSelectedSubRegion(subRegion);
+  //   if (subDetailRef.current){
+  //     subDetailRef.current.removeAttribute('open');
+  //   }
     
     
-  };
+  //};
   useEffect(()=>{
     if (selectedRegion){
-      const combinedRegion = `${selectedRegion.mainReg || ""} ${selectedSubRegion || ""}`;
-      $updateAnswer("location", combinedRegion);
+      const combinedRegion = `${selectedRegion.initial || ""}`;
+      $updateAnswer("location", combinedRegion); // 장소 데이터의 최상위 컬렉션이 이니셜로 되어있음
     }
-  },[selectedSubRegion]);
+  },[selectedRegion]);
   return (
     <>
       <QuesBlock>
@@ -120,33 +116,17 @@ const LocationSelection = ({$updateAnswer}) => {
           <DropdownContainer>
             <details ref={detailRef} role="list">
               <Summary aria-haspopup="listbox" role="button">
-                {selectedRegion ? selectedRegion.mainReg : "Select A Region"}
+                {selectedRegion ? selectedRegion.station : "Select A Region"}
               </Summary>
               <DropdownList role="listbox">
                 {regionData.map((region) => (
-                  <li key={region.prior} onClick={() => handleSelectMainRegion(region)}>
-                    {region.mainReg}
+                  <li key={region.prior} onClick={() => handleSelectstation(region)}>
+                    {region.station}
                   </li>
                 ))}
               </DropdownList>
             </details>
           </DropdownContainer>
-          {selectedRegion && selectedRegion.subReg && selectedRegion.subReg.length>0 && (
-            <DropdownContainer >
-            <details ref={subDetailRef} role="list">
-              <Summary aria-haspopup="listbox" role="button">
-              {selectedSubRegion ? selectedSubRegion : "Select A Sub Region"}
-              </Summary>
-              <DropdownList role="listbox">
-                {selectedRegion.subReg.map((subRegion, index)=>(
-                  <li key={`${subRegion.name}-${index}`} onClick={() => handleSelectSubRegion(subRegion)}>
-                    {subRegion}
-                  </li>
-                ))}
-              </DropdownList>
-            </details>
-          </DropdownContainer>
-          )}
         </Ans>
       </QuesBlock>
     </>
