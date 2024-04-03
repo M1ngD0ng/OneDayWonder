@@ -5,12 +5,6 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 import { IPlace } from "./home";
 import { AddP, Grid, H1, InfoDiv, ItemDiv, ItemImg, NameH3, ResultDiv, SearchBtn, SearchForm, SearchInput, TagP, Wrapper } from '../components/style/style-search';
-import { Link, useNavigate, useParams } from "react-router-dom";
-import React, { useEffect, useState } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../firebase";
-import { IPlace } from "./home";
-import { AddP, Grid, H1, InfoDiv, ItemDiv, ItemImg, NameH3, ResultDiv, SearchBtn, SearchForm, SearchInput, TagP, Wrapper } from '../components/style/style-search';
 
 export default function Search() {
     const { value } = useParams();
@@ -23,50 +17,7 @@ export default function Search() {
       }
     };
     const [searchResults, setSearchResults] = useState<IPlace[]>([]);
-    useEffect(() => {
-      const fetchSearchResults = async () => {
-        try {
-          const addressQuery = query(
-            collection(db, 'sample'),
-            where('address', 'array-contains', value),
-          );
-          const typesQuery = query(
-            collection(db, 'sample'),
-            where('types', 'array-contains', value),
-          );
-          const nameQuery = query(
-            collection(db, 'sample'),
-            where('name', '==', value)
-          );
-          const [addressSnapshot, typesSnapshot, nameSnapshot] = await Promise.all([
-            getDocs(addressQuery),
-            getDocs(typesQuery),
-            getDocs(nameQuery),
-          ]);
-          const addressData = addressSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          const typesData = typesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          const nameData = nameSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          const uniqueResults = [
-            ...new Map([...addressData, ...typesData, ...nameData].map(item => [item.id, item])).values()
-          ];
-          const sortedResults = (uniqueResults as IPlace[]).sort((a,b) => b.rating - a.rating);
-          setSearchResults(sortedResults);
-        } catch (e) {
-          console.log(e);
-        }
-      };
-      fetchSearchResults();
-    }, [value]);
-    const { value } = useParams();
-    const navigate = useNavigate();
-    const [searcValue, setSearchValue] = useState("");
-    const onSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (searcValue.trim() !== "") {
-        navigate(`/search/${encodeURIComponent(searcValue)}`);
-      }
-    };
-    const [searchResults, setSearchResults] = useState<IPlace[]>([]);
+    
     useEffect(() => {
       const fetchSearchResults = async () => {
         try {

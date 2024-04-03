@@ -72,8 +72,6 @@ const LocationSelection = ({$updateAnswer}) => {
   const fetchRegionsData = async () => {
     const q = query(collection(db, "regions"),
       orderBy("prior","asc"));
-    const q = query(collection(db, "regions"),
-      orderBy("prior","asc"));
     const querySnapshot = await getDocs(q);
 
     const regions=querySnapshot.docs.map(doc=>({
