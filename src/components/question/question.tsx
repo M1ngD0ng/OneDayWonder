@@ -8,6 +8,7 @@ import MoodSelection from "./mood-selection";
 import { auth, db } from "../../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import MenuSelection from "./menu-selection";
 
 
 const Wrapper = styled.div` 
@@ -68,6 +69,7 @@ export default function Question() {
     date: [],
     people: null,
     mood: [],
+    menu: null,
   });
   const [isSelectComplete, setIsSelectComplete]=useState(true);
   const user=auth.currentUser;
@@ -84,7 +86,7 @@ export default function Question() {
   
   const answerSubmit=async(e:React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
-    if(selectedAnswers.location==null || selectedAnswers.date.length===0 || selectedAnswers.people==null || selectedAnswers.mood.length===0){
+    if(selectedAnswers.location==null || selectedAnswers.date.length===0 || selectedAnswers.people==null || selectedAnswers.mood.length===0 || selectedAnswers.menu==null){
       setIsSelectComplete(false);
       return;
     } 
@@ -95,6 +97,7 @@ export default function Question() {
         date: selectedAnswers.date,
         people: selectedAnswers.people,
         mood: selectedAnswers.mood,
+        menu: selectedAnswers.menu,
       };
       const combinedDate= `${selectedAnswers.date[0]}_${selectedAnswers.date[1]}_${selectedAnswers.date[2]}`;
       
@@ -116,6 +119,8 @@ export default function Question() {
       <PeopleSelection $updateAnswer={updateAnswer}/>
       <Dots />
       <MoodSelection $updateAnswer={updateAnswer}/>
+      <Dots />
+      <MenuSelection $updateAnswer={updateAnswer}/>
       {isSelectComplete? <></>: 
       <Alert>
         ❌ 선택하지 않은 항목이 있습니다. ❌

@@ -6,10 +6,9 @@ import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../../firebase";
 
 // 지역 타입 정의
-interface IRegion {
-  station: string;
+interface IMenu {
+  title: string;
   prior: string;
-  initial: string;
 }
 
 // 스타일드 컴포넌트 정의
@@ -56,71 +55,59 @@ const Summary=styled.summary`
   }
 `;
 
-const LocationSelection = ({$updateAnswer}) => {
+const MenuSelection = ({$updateAnswer}) => {
   // 지역 질문
-  const [regionData, setRegionData] = useState<IRegion[]>([]);
-  const [selectedRegion, setSelectedRegion] = useState<IRegion | null>(null);
- // const [subRegions, setSubRegions] = useState<ISubRegion[]>([]);
- // const [selectedSubRegion, setSelectedSubRegion] = useState<ISubRegion | null>(null);
+  const [menuData, setMenuData] = useState<IMenu[]>([]);
+  const [selectedMenu, setSelectedMenu] = useState<IMenu | null>(null);
 
   const detailRef=useRef<HTMLDetailsElement>(null);
-  //const subDetailRef=useRef<HTMLDetailsElement>(null);
 
-  const fetchRegionsData = async () => {
-    const q = query(collection(db, "regions"),
+  const fetchMenusData = async () => {
+    const q = query(collection(db, "menus"),
       orderBy("prior","asc"));
     const querySnapshot = await getDocs(q);
 
-    const regions=querySnapshot.docs.map(doc=>({
+    const menus=querySnapshot.docs.map(doc=>({
       _id: doc.id,
-      ...doc.data() as IRegion
+      ...doc.data() as IMenu
     }));
-    setRegionData(regions);
+    console.log(menus);
+    setMenuData(menus);
   }
   useEffect(() => {
-    fetchRegionsData(); 
+    fetchMenusData(); 
   }, []);
 
-  const handleSelectstation =(region: IRegion)=>{
-    setSelectedRegion(region);
+  const handleSelectMenu =(menu: IMenu)=>{
+    setSelectedMenu(menu);
 
-    // setSubRegions(region.subReg || []);
-    // setSelectedSubRegion(null); // 두 번째 드롭다운의 선택을 초기화
     if (detailRef.current){
       detailRef.current.removeAttribute('open');
     }
   };
 
-  // const handleSelectSubRegion =(subRegion: ISubRegion)=>{
-  //   setSelectedSubRegion(subRegion);
-  //   if (subDetailRef.current){
-  //     subDetailRef.current.removeAttribute('open');
-  //   }
-    
-    
-  //};
   useEffect(()=>{
-    if (selectedRegion){
-      const combinedRegion = `${selectedRegion.initial || ""}`;
-      $updateAnswer("location", combinedRegion); // 장소 데이터의 최상위 컬렉션이 이니셜로 되어있음
+    if (selectedMenu){
+      //const combinedRegion = `${selectedRegion.initial || ""}`;
+      $updateAnswer("menu", selectedMenu.title); // 장소 데이터의 최상위 컬렉션이 이니셜로 되어있음
     }
-  },[selectedRegion]);
+  },[selectedMenu]);
   return (
     <>
       <QuesBlock>
         <Ques>
-          어디서 일정을 보내실 건가요 ?
+        어떤 식사 메뉴를 원하시나요 ?
         </Ques>
         <Ans>
           <DropdownContainer>
             <details ref={detailRef} role="list">
               <Summary aria-haspopup="listbox" role="button">
-                {selectedRegion ? selectedRegion.station : "Select A Region"}
+                {selectedMenu ? selectedMenu.title : "Select A Menu"}
               </Summary>
               <DropdownList role="listbox">
-                {regionData.map((region) => (
-                  <li key={region.prior} onClick={() => handleSelectstation(region)}>
-                    {region.station}
+                {menuData.map((menu) => (
+                  <li key={menu.prior} onClick={() => handleSelectMenu(menu)}>
+                    {menu.title}
                   </li>
                 ))}
               </DropdownList>
@@ -132,4 +119,4 @@ const LocationSelection = ({$updateAnswer}) => {
   );
 };
 
-export default LocationSelection;
+export default MenuSelection;
