@@ -4,7 +4,7 @@ import { Category } from "../../routes/like";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Unsubscribe } from "firebase/auth";
-import { collection, doc, getDoc, query, where } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 export interface IPlace {
   id: string;
@@ -72,7 +72,7 @@ export default function LikedList() {
   const [likedPlaces, setLikedPlaces] = useState<IPlace[]>([]);
   const user = auth.currentUser;
 
-  const onPlaceClick=(pid)=>{
+  const onPlaceClick=(pid: string)=>{
     navigate(`/place/${pid}`);
   }
 
@@ -87,7 +87,7 @@ export default function LikedList() {
           const userData = userDocSnapshot.data();
           if (userData.liked) {
             // setLikedPlaces가 함수로 호출되어야 합니다.
-            const placesPromises=userData.liked.map(async (placeId) =>{
+            const placesPromises=userData.liked.map(async (placeId: string) =>{
               const placeRef=doc(db,"sample",placeId);
               const placeSnap=await getDoc(placeRef);
               if (placeSnap.exists()){

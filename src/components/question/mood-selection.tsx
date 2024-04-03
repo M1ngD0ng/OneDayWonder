@@ -1,5 +1,5 @@
 // MoodSelection.tsx (분위기 선택 관련 컴포넌트)
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Ans, Ques, QuesBlock } from "./question";
 
@@ -12,7 +12,7 @@ const TagDiv = styled.div`
   justify-content: center;
 `;
 
-const TagA = styled.div`
+const TagA = styled.div<{$isSelected: boolean}>`
   width: max-content;
   background-color: ${(props) => (props.$isSelected ? "#AB6FE3" : "#BB91E3")};
   font-weight: ${(props) => (props.$isSelected ? "bolder" : "initial")};
@@ -32,10 +32,10 @@ const MoodSelection = ({$updateAnswer}) => {
   const moodOptions2 = ["파티", "진지한 대화", "조용한"];
   const moodOptions3 = ["무드있는", "화려한", "역동적인"];
 
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   // 옵션을 선택 또는 해제할 때 호출되는 함수
-  const toggleOption = (option) => {
+  const toggleOption = (option: string) => {
     if (selectedOptions.includes(option)) {
       // 이미 선택된 옵션이면 선택 해제
       setSelectedOptions(selectedOptions.filter((item) => item !== option));

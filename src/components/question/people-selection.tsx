@@ -1,5 +1,5 @@
 // PeopleSelection.tsx (인원 선택 관련 컴포넌트)
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Ans, Ques, QuesBlock } from "./question";
 
@@ -12,7 +12,7 @@ const TagDiv = styled.div`
   justify-content: center;
 `;
 
-const TagA = styled.div`
+const TagA = styled.div<{$isSelected: boolean}>`
   width: max-content;
   background-color: ${(props) => (props.$isSelected ? "#AB6FE3" : "#BB91E3")};
   font-weight: ${(props) => (props.$isSelected ? "bolder" : "initial")};
@@ -43,7 +43,7 @@ const PeopleSelection = ({$updateAnswer}) => {
      { value: 7, label: '7명 이상' },
    ];
  
-   const handleSelectPeople = (count) => {
+   const handleSelectPeople = (count: number) => {
      setSelectedPeople(count);
      setIsSelectPeople(true);
    };

@@ -51,7 +51,7 @@ const NameInput = styled.input`
 `;
 
 export default function MyPageEdit() {
-    const nagivate = useNavigate();
+    //const nagivate = useNavigate();
     const user = auth.currentUser;
     const [showEdit, setshowEdit] = useState(false);
     const [isPhotos,setIsPhotos] = useState(user?.photoURL);

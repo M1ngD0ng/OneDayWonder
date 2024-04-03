@@ -1,5 +1,5 @@
 // LocationSelection.tsx (지역 선택 관련 컴포넌트)
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Ans, Ques, QuesBlock } from "./question";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";

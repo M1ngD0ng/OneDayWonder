@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import MenuSelection from "./menu-selection";
 
 
-const Wrapper = styled.div` 
+const Wrapper = styled.form` 
   align-items: center;
   flex-direction: column;
   display: flex;
@@ -74,7 +74,7 @@ export default function Question() {
   const [isSelectComplete, setIsSelectComplete]=useState(true);
   const user=auth.currentUser;
 
-  const updateAnswer = (category, value) => {
+  const updateAnswer = (category: string, value: string | string[]) => {
     setSelectedAnswers((prevAnswers) => ({
       ...prevAnswers,
       [category]: value,
@@ -101,34 +101,39 @@ export default function Question() {
       };
       const combinedDate= `${selectedAnswers.date[0]}_${selectedAnswers.date[1]}_${selectedAnswers.date[2]}`;
       
-      const userCollectionRef=collection(db, "quesAnswer", user?.uid,combinedDate);
+      if (user?.uid && combinedDate){
+        const userCollectionRef=collection(db, "quesAnswer", user.uid,combinedDate);
+        await addDoc(userCollectionRef,newDoc);
+        navigate("/myplan");
+        console.log("데이터 추가 완료!");
+      }
+      //const userCollectionRef=collection(db, "quesAnswer", user?.uid,combinedDate);
 
-      await addDoc(userCollectionRef,newDoc);
-      navigate("/myplan");
-      console.log("데이터 추가 완료!");
+      
     } catch (e) {
       console.log(e);
     }  
   };
   return (
-    <Wrapper>
-      <DateSelection $updateAnswer={updateAnswer}/>
-      <Dots />
-      <LocationSelection $updateAnswer={updateAnswer}/>
-      <Dots />
-      <PeopleSelection $updateAnswer={updateAnswer}/>
-      <Dots />
-      <MoodSelection $updateAnswer={updateAnswer}/>
-      <Dots />
-      <MenuSelection $updateAnswer={updateAnswer}/>
-      {isSelectComplete? <></>: 
-      <Alert>
-        ❌ 선택하지 않은 항목이 있습니다. ❌
-      </Alert>
-      }
-      <Button onClick={answerSubmit}>
-       ✔️ Create A Plan Now
-      </Button>
+    <Wrapper onSubmit={answerSubmit}>
+        <DateSelection $updateAnswer={updateAnswer}/>
+        <Dots />
+        <LocationSelection $updateAnswer={updateAnswer}/>
+        <Dots />
+        <PeopleSelection $updateAnswer={updateAnswer}/>
+        <Dots />
+        <MoodSelection $updateAnswer={updateAnswer}/>
+        <Dots />
+        <MenuSelection $updateAnswer={updateAnswer}/>
+        {isSelectComplete? <></>: 
+        <Alert>
+          ❌ 선택하지 않은 항목이 있습니다. ❌
+        </Alert>
+        }
+        <Button type="submit">
+        ✔️ Create A Plan Now
+        </Button>
+      
       
     </Wrapper>
   )

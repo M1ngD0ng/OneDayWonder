@@ -1,6 +1,5 @@
 import '@picocss/pico';
 import { useState } from 'react';
-import styled from 'styled-components';
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"; 
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";

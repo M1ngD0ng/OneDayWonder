@@ -1,11 +1,10 @@
 import '@picocss/pico';
 import { useState } from 'react';
-import { auth, db } from "../firebase";
+import { auth} from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
 import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"; 
 import { A, Button, Div, Form, H1, H2, Input, Label, Wrapper } from '../components/style/style-login';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 export default function Login() {
   const navigate=useNavigate();
