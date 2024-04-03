@@ -2,10 +2,40 @@ import '@picocss/pico';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { IPlace } from './home';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { Timestamp, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import { H1, H3, Img, MapDiv, ReviewDiv, ReviewP, TagA, TagDiv, Wrapper } from '../components/style/style-detailPlace';
+import firebase from 'firebase/compat/app';
 
+declare global {
+    interface Window {
+        google: any;
+    }
+}
+export interface ILikedItem {
+    liked_id: string;
+    likedAt: firebase.firestore.Timestamp;
+}
+const addToLikedArray = async (userId: string, itemId: string) => {
+    try {
+        const userDocRef = doc(db, 'users', userId);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+            const likedArray = userDoc.data()?.liked || [];
+            const updateLikedArray = [
+                ...likedArray,
+                {
+                    liked_id: itemId,
+                    likedAt: Timestamp.now(),
+                },
+            ];
+            await updateDoc(userDocRef, { liked: updateLikedArray });
+        }
+    } catch (e) {
+        console.error(e);
+    }
+};
 export default function Place() {
     const { id } = useParams();
     const [placeData, setPlaceData] = useState<IPlace | null>(null);
@@ -20,8 +50,8 @@ export default function Place() {
                 if (!userSnapshot.exists()) {
                     await setDoc(userDocRef, { liked: [] });
                 }
-                const likedArray = userSnapshot.data()?.liked || [];
-                const checkLiked = likedArray.includes(id);
+                const likedArray: ILikedItem[] = userSnapshot.data()?.liked || [];
+                const checkLiked = likedArray.some(item => item.liked_id === id);
                 setIsLiked(checkLiked);
             } catch (e) {
                 console.error(e);
@@ -33,7 +63,7 @@ export default function Place() {
         const fetchPlaceData = async () => {
             try {
                 if (!id) return;
-                const docRef = doc(db, 'sample', id);
+                const docRef = doc(db, 'place', id);
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
                     const data = docSnap.data();
@@ -46,6 +76,8 @@ export default function Place() {
         fetchPlaceData();
     }, [id]);
     useEffect(() => {
+        if (!placeData) return;
+
         const loadGoogleMapsScript = () => {
             const key = import.meta.env.VITE_APP_MAPS_API_KEY;
             const script = document.createElement('script');
@@ -55,31 +87,52 @@ export default function Place() {
             document.head.appendChild(script);
             script.onload = initMap;
         };
+
         const initMap = () => {
-            if (!placeData) return;
-            const myLatLng = { lat: placeData.lat, lng: placeData.lng };
-            const map = new window.google.maps.Map(document.getElementById('map'), {
-                center: myLatLng,
-                zoom: 17,
+            const geocoder = new window.google.maps.Geocoder();
+            geocoder.geocode({ address: placeData.address }, (results: any, status: any) => {
+                if (status === "OK") {
+                    const location = results[0].geometry.location;
+                    const lat = location.lat();
+                    const lng = location.lng();
+                    const myLatLng = { lat: lat, lng: lng };
+                    const map = new window.google.maps.Map(document.getElementById('map'), {
+                        center: myLatLng,
+                        zoom: 17,
+                    });
+                    new window.google.maps.Marker({
+                        position: myLatLng,
+                        map,
+                        title: placeData.place_name,
+                      });
+                } else {
+                    console.error('위도,경도 추출 실패', status);
+                }
             });
-            new google.maps.Marker({
-                position: myLatLng,
-                map,
-                title: placeData.name,
-              });
         };
+        
         loadGoogleMapsScript();
     }, [placeData]);
     const onLikeClick = async () => {
         try {
+            if(!user || !id) return;
             const userDoc = await getDoc(doc(db,'users',user.uid));
-            const likedArray = userDoc.data()?.liked || [];
+            const likedArray: ILikedItem[] = userDoc.data()?.liked || [];
+            const placedocRef = doc(db,'place', id);
+            const placedocSnap = await getDoc(placedocRef);
+            const pData = placedocSnap.data();
+            const placeLiked = pData?.liked || 0;
             if (isLiked) {
-                const updateLikedArray = likedArray.filter((likedId: string) => likedId !== id);
+                const updateLikedArray = likedArray.filter((likedItem) => likedItem.liked_id !== id);
                 await updateDoc(doc(db, 'users', user.uid), { liked: updateLikedArray });
+                await updateDoc(placedocRef, {
+                    liked: placeLiked - 1
+                });
             } else {
-                const updateLikeArray = [...likedArray, id];
-                await updateDoc(doc(db, 'users', user.uid), { liked: updateLikeArray });
+                await addToLikedArray(user.uid, id);
+                await updateDoc(placedocRef, {
+                    liked: placeLiked + 1
+                });
             }
             setIsLiked((prevIsLiked) => !prevIsLiked);
         } catch (e) {
@@ -88,20 +141,21 @@ export default function Place() {
     };
     return(
         <Wrapper>
-            <Img src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800" />
+            <Img src={placeData?.img} />
             <H1> 
-                <span id='name'>{placeData?.name}</span>
+                <span id='name'>{placeData?.place_name}</span>
                 <span id='like' onClick={onLikeClick}>{isLiked ? '❤️' : '♡'}</span>
             </H1>
             <ReviewDiv>
                 <ReviewP> 별점 : {placeData?.rating} </ReviewP>
-                <ReviewP> 전화번호 : {placeData?.phoneNumber ?? "None"} </ReviewP>
-                <ReviewP> 유형 : {placeData?.types} </ReviewP>
+                <ReviewP> 카테고리 : {placeData?.category} </ReviewP>
+                <ReviewP> 좋아요 수 : {placeData?.liked} </ReviewP>
+                <ReviewP> 일정 기록 수 : {placeData?.picked} </ReviewP>
             </ReviewDiv>
             <TagDiv>
-                <TagA href='#'> #아직 </TagA>
-                <TagA href='#'> #구현 </TagA>
-                <TagA href='#'> #못함 </TagA>
+                {placeData?.hash_tag.map((tag, index) => (
+                    <TagA key={index} href={`#${tag}`}> #{tag} </TagA>
+                ))}
             </TagDiv>
             <H3> 위치 : {placeData?.address} </H3>
             <MapDiv id="map"></MapDiv>

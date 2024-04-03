@@ -5,6 +5,12 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 import { IPlace } from "./home";
 import { AddP, Grid, H1, InfoDiv, ItemDiv, ItemImg, NameH3, ResultDiv, SearchBtn, SearchForm, SearchInput, TagP, Wrapper } from '../components/style/style-search';
+import { Link, useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../firebase";
+import { IPlace } from "./home";
+import { AddP, Grid, H1, InfoDiv, ItemDiv, ItemImg, NameH3, ResultDiv, SearchBtn, SearchForm, SearchInput, TagP, Wrapper } from '../components/style/style-search';
 
 export default function Search() {
     const { value } = useParams();
@@ -51,6 +57,33 @@ export default function Search() {
       };
       fetchSearchResults();
     }, [value]);
+    const { value } = useParams();
+    const navigate = useNavigate();
+    const [searcValue, setSearchValue] = useState("");
+    const onSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (searcValue.trim() !== "") {
+        navigate(`/search/${encodeURIComponent(searcValue)}`);
+      }
+    };
+    const [searchResults, setSearchResults] = useState<IPlace[]>([]);
+    useEffect(() => {
+      const fetchSearchResults = async () => {
+        try {
+          const keywordsQuery = query(
+            collection(db, 'sample'),
+            where('keywords', 'array-contains', value),
+          );
+          const keywordsSnapshot = await getDocs(keywordsQuery);
+          const keywordsData = keywordsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          const sortedResults = (keywordsData as IPlace[]).sort((a,b) => b.rating - a.rating);
+          setSearchResults(sortedResults);
+        } catch (e) {
+          console.log(e);
+        }
+      };
+      fetchSearchResults();
+    }, [value]);
     return(
         <Wrapper>
         <H1> One Day Wonder </H1>
@@ -67,7 +100,7 @@ export default function Search() {
             {searchResults.map((result) => (
               <ItemDiv>
                 <Link to={`/place/${result.id}`}>
-                  <ItemImg src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800"/>
+                  <ItemImg src={result.photo_url}/>
                   <InfoDiv>
                     <NameH3>{result.name}</NameH3>
                     <AddP>{result.address}</AddP>
@@ -76,47 +109,6 @@ export default function Search() {
                 </Link>
               </ItemDiv>
             ))}
-
-            <ItemDiv>
-                <ItemImg src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800"/>
-                <InfoDiv>
-                    <NameH3> <a href="/place"> 인천대공원</a> </NameH3>
-                    <AddP>인천광역시 </AddP>
-                    <TagP>#조용한 #자연 #공원 </TagP>
-                </InfoDiv>
-            </ItemDiv>
-            <ItemDiv>
-                <ItemImg src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800"/>
-                <InfoDiv>
-                    <NameH3> <a href="/place"> 인천대공원</a> </NameH3>
-                    <AddP>인천광역시 </AddP>
-                    <TagP>#조용한 #자연 #공원 </TagP>
-                </InfoDiv>
-            </ItemDiv>
-            <ItemDiv>
-                <ItemImg src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800"/>
-                <InfoDiv>
-                    <NameH3> <a href="/place"> 인천대공원</a> </NameH3>
-                    <AddP>인천광역시 </AddP>
-                    <TagP>#조용한 #자연 #공원 </TagP>
-                </InfoDiv>
-            </ItemDiv>
-            <ItemDiv>
-                <ItemImg src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800"/>
-                <InfoDiv>
-                    <NameH3> <a href="/place"> 인천대공원</a> </NameH3>
-                    <AddP>인천광역시 </AddP>
-                    <TagP>#조용한 #자연 #공원 </TagP>
-                </InfoDiv>
-            </ItemDiv>
-            <ItemDiv>
-                <ItemImg src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800"/>
-                <InfoDiv>
-                    <NameH3> <a href="/place"> 인천대공원</a> </NameH3>
-                    <AddP>인천광역시 </AddP>
-                    <TagP>#조용한 #자연 #공원 </TagP>
-                </InfoDiv>
-            </ItemDiv>
           </ResultDiv>
         </Grid>
       </Wrapper>

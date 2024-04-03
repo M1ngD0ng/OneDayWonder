@@ -10,16 +10,15 @@ import { Grid, H1, HotFigure, HotImg, HotSmall, HotSpot, ImgDiv, NoPlan, Search,
 export interface IPlace {
   id: string;
   address: string;
-  lat: number;
+  category: string;
+  hash_tag: string[];
+  img: string;
   liked: number;
-  lng: number;
-  name: string;
-  phoneNumber: string;
   picked: number;
-  placeId: string;
+  place_name: string;
   rating: number;
-  types: string;
-  url: string;
+  reg: string;
+  reviews: string[];
 }
 export default function Home(){
   const navigate = useNavigate();
@@ -43,26 +42,25 @@ export default function Home(){
     let unsubscribe: Unsubscribe | null = null;
     const fetchTopThreeData = async () => {
       const q = query(
-        collection(db, 'sample'),
+        collection(db, 'place'),
         where('rating','!=','N/A'),
         orderBy('rating','desc'),
         limit(3)
       );
       unsubscribe = await onSnapshot(q, (snapshot) => {
         const qdata = snapshot.docs.map((doc) => {
-          const { address, lat, liked, lng, name, phoneNumber, picked, placeId, rating, types, url } = doc.data();
+          const { address, category, hash_tag, img, liked, picked, place_name, rating, reg, reviews} = doc.data();
           return {
             address,
-            lat,
+            category,
+            hash_tag,
+            img,
             liked,
-            lng,
-            name,
-            phoneNumber,
             picked,
-            placeId,
+            place_name,
             rating,
-            types,
-            url,
+            reg,
+            reviews,
             id: doc.id,
           };
         });
@@ -87,9 +85,9 @@ export default function Home(){
           </SearchBtn>
         </Search>
         <Today>
-          <Small> 오늘의 일정 </Small>
-          {isTodays? <NoPlan> 오늘의 일정이 없습니다 </NoPlan>:<TodaysPlan/>}
-          <TodayBtn onClick={onPlanClick}> 일정 수정하기 </TodayBtn>
+          <Small> 오늘의 기록 </Small>
+          {isTodays? <NoPlan> 오늘의 기록이 없습니다 </NoPlan>:<TodaysPlan/>}
+          <TodayBtn onClick={onPlanClick}> 기록 추가하기 </TodayBtn>
         </Today>
         <HotSpot>
           <HotSmall> 요즘 핫한 Spot 🔥 </HotSmall>
@@ -97,8 +95,8 @@ export default function Home(){
             {topThreeData.map((topdata) => (
               <ImgDiv key={topdata.id}>
               <Link to={`/place/${topdata.id}`}>
-                <HotImg src="https://mblogthumb-phinf.pstatic.net/MjAyMzA4MjBfMjYx/MDAxNjkyNTI4ODcxNjQ0.JLR97VZegP4ErIJ54F8Qq2Il-j8aCxTHNIkfWG8T1kAg.ZETaQLIGnOVG3iBX5XyHGRNZg7oBjdyQfaiCb3-8VY8g.JPEG.bl85219/IMG%EF%BC%BF20230820%EF%BC%BF173828.jpg?type=w800" />
-                <TextDiv> {topdata.name} </TextDiv>
+                <HotImg src={topdata.img} />
+                <TextDiv> {topdata.place_name} </TextDiv>
               </Link>
             </ImgDiv>
             ))}
