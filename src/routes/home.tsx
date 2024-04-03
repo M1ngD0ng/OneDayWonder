@@ -1,5 +1,5 @@
 import '@picocss/pico';
-import React, React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import TodaysPlan from "../components/todaysplan";
 import { Link, useNavigate } from "react-router-dom";
 import { db } from "../firebase";
@@ -10,18 +10,15 @@ import { Grid, H1, HotFigure, HotImg, HotSmall, HotSpot, ImgDiv, NoPlan, Search,
 export interface IPlace {
   id: string;
   address: string;
-  keywords: string;
-  lat: number;
+  category: string;
+  hash_tag: string[];
+  img: string;
   liked: number;
-  lng: number;
-  name: string;
-  phone_number: string;
-  photo_url: string;
   picked: number;
-  place_id: string;
+  place_name: string;
   rating: number;
-  types: string;
-  url: string;
+  reg: string;
+  reviews: string[];
 }
 export default function Home(){
   const navigate = useNavigate();
@@ -45,28 +42,25 @@ export default function Home(){
     let unsubscribe: Unsubscribe | null = null;
     const fetchTopThreeData = async () => {
       const q = query(
-        collection(db, 'sample'),
+        collection(db, 'place'),
         where('rating','!=','N/A'),
         orderBy('rating','desc'),
         limit(3)
       );
       unsubscribe = await onSnapshot(q, (snapshot) => {
         const qdata = snapshot.docs.map((doc) => {
-          const { address, keywords, lat, liked, lng, name, phone_number, photo_url, picked, place_id, rating, types, url } = doc.data();
+          const { address, category, hash_tag, img, liked, picked, place_name, rating, reg, reviews} = doc.data();
           return {
             address,
-            keywords,
-            lat,
+            category,
+            hash_tag,
+            img,
             liked,
-            lng,
-            name,
-            phone_number,
-            photo_url,
             picked,
-            place_id,
+            place_name,
             rating,
-            types,
-            url,
+            reg,
+            reviews,
             id: doc.id,
           };
         });
@@ -91,9 +85,9 @@ export default function Home(){
           </SearchBtn>
         </Search>
         <Today>
-          <Small> 오늘의 일정 </Small>
-          {isTodays? <NoPlan> 오늘의 일정이 없습니다 </NoPlan>:<TodaysPlan/>}
-          <TodayBtn onClick={onPlanClick}> 일정 수정하기 </TodayBtn>
+          <Small> 오늘의 기록 </Small>
+          {isTodays? <NoPlan> 오늘의 기록이 없습니다 </NoPlan>:<TodaysPlan/>}
+          <TodayBtn onClick={onPlanClick}> 기록 추가하기 </TodayBtn>
         </Today>
         <HotSpot>
           <HotSmall> 요즘 핫한 Spot 🔥 </HotSmall>
@@ -101,8 +95,8 @@ export default function Home(){
             {topThreeData.map((topdata) => (
               <ImgDiv key={topdata.id}>
               <Link to={`/place/${topdata.id}`}>
-                <HotImg src={topdata.photo_url} />
-                <TextDiv> {topdata.name} </TextDiv>
+                <HotImg src={topdata.img} />
+                <TextDiv> {topdata.place_name} </TextDiv>
               </Link>
             </ImgDiv>
             ))}
