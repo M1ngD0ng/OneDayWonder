@@ -8,6 +8,7 @@ export const Div = styled.div`
   background-image: linear-gradient(to bottom, #8A2BE2, white 45%);
   position: fixed;
   overflow-y: auto;
+  margin-bottom: 10%;
 `;
 export const H1 = styled.h1`
   color: white;

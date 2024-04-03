@@ -7,6 +7,7 @@ export const Wrapper = styled.div`
   height: 90%;
   position: fixed;
   overflow-y: auto;
+  margin-bottom: 10%;
 `;
 export const Img = styled.img`
     width: 100%;
@@ -55,14 +56,15 @@ export const TagDiv = styled.div`
 export const TagA = styled.a`
   background-color: #BB91E3;
   color: white;
-  width: 20%;
+  width: 110px;
   border-radius: 10px;
   padding: 3%;
   margin-left: 2%;
   margin-right: 2%;
+  margin-bottom: 2%;
   text-align: center;
   text-decoration: none;
-  font-size: 20px;
+  font-size: 18px;
   box-shadow: 0px 5px 5px lightgray;
 `;
 export const H3 = styled.h3`
