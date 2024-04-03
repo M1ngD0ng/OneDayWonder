@@ -35,7 +35,7 @@ const Nav=styled.div`
     align-items: center;
     justify-content: center;  
     width: 25%; 
-
+  }
 `;
 
 export default function NavBar() {
