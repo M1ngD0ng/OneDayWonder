@@ -1,6 +1,5 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
-import Loading from "./components/loading";
 import '@picocss/pico';
 import CreateAccount from "./routes/createAccount";
 import Login from "./routes/login";
@@ -17,6 +16,7 @@ import CreatePlan from "./routes/createPlan";
 import Place from "./routes/detail-place";
 import Search from "./routes/search";
 import { Provider } from "react-redux";
+import LoadingScreen from "./components/loading-screen";
 
 
 const router = createBrowserRouter([
@@ -85,7 +85,7 @@ function App() {
   return (
     <>
       <GlobalStyles/>
-      {isLoading? <Loading />:<RouterProvider router={router} /> }
+      {isLoading? <LoadingScreen />:<RouterProvider router={router} /> }
     </>
   );
 }
