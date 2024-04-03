@@ -8,7 +8,9 @@ import { db } from "../../firebase";
 // 지역 타입 정의
 interface IRegion {
   station: string;
+  station: string;
   prior: string;
+  initial: string;
   initial: string;
 }
 
@@ -62,11 +64,16 @@ const LocationSelection = ({$updateAnswer}) => {
   const [selectedRegion, setSelectedRegion] = useState<IRegion | null>(null);
  // const [subRegions, setSubRegions] = useState<ISubRegion[]>([]);
  // const [selectedSubRegion, setSelectedSubRegion] = useState<ISubRegion | null>(null);
+ // const [subRegions, setSubRegions] = useState<ISubRegion[]>([]);
+ // const [selectedSubRegion, setSelectedSubRegion] = useState<ISubRegion | null>(null);
 
   const detailRef=useRef<HTMLDetailsElement>(null);
   //const subDetailRef=useRef<HTMLDetailsElement>(null);
+  //const subDetailRef=useRef<HTMLDetailsElement>(null);
 
   const fetchRegionsData = async () => {
+    const q = query(collection(db, "regions"),
+      orderBy("prior","asc"));
     const q = query(collection(db, "regions"),
       orderBy("prior","asc"));
     const querySnapshot = await getDocs(q);
@@ -82,8 +89,11 @@ const LocationSelection = ({$updateAnswer}) => {
   }, []);
 
   const handleSelectstation =(region: IRegion)=>{
+  const handleSelectstation =(region: IRegion)=>{
     setSelectedRegion(region);
 
+    // setSubRegions(region.subReg || []);
+    // setSelectedSubRegion(null); // 두 번째 드롭다운의 선택을 초기화
     // setSubRegions(region.subReg || []);
     // setSelectedSubRegion(null); // 두 번째 드롭다운의 선택을 초기화
     if (detailRef.current){
@@ -96,14 +106,23 @@ const LocationSelection = ({$updateAnswer}) => {
   //   if (subDetailRef.current){
   //     subDetailRef.current.removeAttribute('open');
   //   }
+  // const handleSelectSubRegion =(subRegion: ISubRegion)=>{
+  //   setSelectedSubRegion(subRegion);
+  //   if (subDetailRef.current){
+  //     subDetailRef.current.removeAttribute('open');
+  //   }
     
     
+  //};
   //};
   useEffect(()=>{
     if (selectedRegion){
       const combinedRegion = `${selectedRegion.initial || ""}`;
       $updateAnswer("location", combinedRegion); // 장소 데이터의 최상위 컬렉션이 이니셜로 되어있음
+      const combinedRegion = `${selectedRegion.initial || ""}`;
+      $updateAnswer("location", combinedRegion); // 장소 데이터의 최상위 컬렉션이 이니셜로 되어있음
     }
+  },[selectedRegion]);
   },[selectedRegion]);
   return (
     <>
@@ -116,9 +135,12 @@ const LocationSelection = ({$updateAnswer}) => {
             <details ref={detailRef} role="list">
               <Summary aria-haspopup="listbox" role="button">
                 {selectedRegion ? selectedRegion.station : "Select A Region"}
+                {selectedRegion ? selectedRegion.station : "Select A Region"}
               </Summary>
               <DropdownList role="listbox">
                 {regionData.map((region) => (
+                  <li key={region.prior} onClick={() => handleSelectstation(region)}>
+                    {region.station}
                   <li key={region.prior} onClick={() => handleSelectstation(region)}>
                     {region.station}
                   </li>
