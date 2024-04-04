@@ -29,8 +29,11 @@ const DatePick = styled(DatePicker)`
   outline: none !important;
   box-shadow: none !important;
 `;
+interface DateSelectionProps {
+  $updateAnswer: (category: string, value: string | string[]) => void;
+}
 
-const DateSelection = ({$updateAnswer}) => {
+const DateSelection: React.FC<DateSelectionProps> = ({$updateAnswer}) => {
   // 날짜 질문
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -50,7 +53,7 @@ const DateSelection = ({$updateAnswer}) => {
     
   };
   useEffect(()=>{
-    $updateAnswer("date", [year,month,day]); // 선택한 날짜를 부모 컴포넌트로 전달
+    $updateAnswer("date", [year.toString(),month.toString(),day.toString()]); // 선택한 날짜를 부모 컴포넌트로 전달
   },[year,month,day])
 
   return (

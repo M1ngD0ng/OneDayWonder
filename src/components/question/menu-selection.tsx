@@ -53,8 +53,10 @@ const Summary=styled.summary`
     outline: none; /* 포커스 상태일 때 테두리 제거 */
   }
 `;
-
-const MenuSelection = ({$updateAnswer}) => {
+interface MenuSelectionProps {
+  $updateAnswer: (category: string, value: string | string[]) => void;
+}
+const MenuSelection: React.FC<MenuSelectionProps> = ({$updateAnswer}) => {
   // 지역 질문
   const [menuData, setMenuData] = useState<IMenu[]>([]);
   const [selectedMenu, setSelectedMenu] = useState<IMenu | null>(null);
