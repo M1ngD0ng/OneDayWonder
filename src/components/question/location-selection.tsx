@@ -8,9 +8,7 @@ import { Ans, Ques, QuesBlock } from "./question";
 // 지역 타입 정의
 interface IRegion {
   station: string;
-  station: string;
   prior: string;
-  initial: string;
   initial: string;
 }
 
@@ -70,8 +68,6 @@ const LocationSelection: React.FC<LocationSelectionProps> = ({$updateAnswer}) =>
   const fetchRegionsData = async () => {
     const q = query(collection(db, "regions"),
       orderBy("prior","asc"));
-    const q = query(collection(db, "regions"),
-      orderBy("prior","asc"));
     const querySnapshot = await getDocs(q);
 
     const regions=querySnapshot.docs.map(doc=>({
@@ -85,7 +81,6 @@ const LocationSelection: React.FC<LocationSelectionProps> = ({$updateAnswer}) =>
   }, []);
 
   const handleSelectstation =(region: IRegion)=>{
-  const handleSelectstation =(region: IRegion)=>{
     setSelectedRegion(region);
 
     if (detailRef.current){
@@ -97,10 +92,7 @@ const LocationSelection: React.FC<LocationSelectionProps> = ({$updateAnswer}) =>
     if (selectedRegion){
       const combinedRegion = `${selectedRegion.initial || ""}`;
       $updateAnswer("location", combinedRegion); // 장소 데이터의 최상위 컬렉션이 이니셜로 되어있음
-      const combinedRegion = `${selectedRegion.initial || ""}`;
-      $updateAnswer("location", combinedRegion); // 장소 데이터의 최상위 컬렉션이 이니셜로 되어있음
     }
-  },[selectedRegion]);
   },[selectedRegion]);
   return (
     <>
@@ -113,12 +105,9 @@ const LocationSelection: React.FC<LocationSelectionProps> = ({$updateAnswer}) =>
             <details ref={detailRef} role="list">
               <Summary aria-haspopup="listbox" role="button">
                 {selectedRegion ? selectedRegion.station : "Select A Region"}
-                {selectedRegion ? selectedRegion.station : "Select A Region"}
               </Summary>
               <DropdownList role="listbox">
                 {regionData.map((region) => (
-                  <li key={region.prior} onClick={() => handleSelectstation(region)}>
-                    {region.station}
                   <li key={region.prior} onClick={() => handleSelectstation(region)}>
                     {region.station}
                   </li>
