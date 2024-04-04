@@ -74,7 +74,7 @@ export const ItemDiv = styled.div`
   box-shadow: 0px 5px 5px lightgrey;
   border-radius: 15px;
   width: 90%; // 너비 설정
-  height: 100px; // 높이 설정
+  height: auto; // 높이 설정
   padding: 4%; // 패딩 설정
   background-color: white; // 배경색 설정
   margin: 10px; // 마진 설정
@@ -83,7 +83,7 @@ export const ItemDiv = styled.div`
 `;
 export const ItemImg = styled.img`
     width: 30%;
-    height: 100%;
+    height: auto;
     border-radius: 10px;
     float: left;
     margin-right: 5%;
