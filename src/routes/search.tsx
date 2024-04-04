@@ -17,6 +17,7 @@ export default function Search() {
       }
     };
     const [searchResults, setSearchResults] = useState<IPlace[]>([]);
+    
     useEffect(() => {
       const fetchSearchResults = async () => {
         try {

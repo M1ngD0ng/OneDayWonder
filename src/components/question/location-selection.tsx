@@ -1,9 +1,9 @@
 // LocationSelection.tsx (지역 선택 관련 컴포넌트)
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { Ans, Ques, QuesBlock } from "./question";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../../firebase";
+import { Ans, Ques, QuesBlock } from "./question";
 
 // 지역 타입 정의
 interface IRegion {
@@ -92,29 +92,11 @@ const LocationSelection = ({$updateAnswer}) => {
   const handleSelectstation =(region: IRegion)=>{
     setSelectedRegion(region);
 
-    // setSubRegions(region.subReg || []);
-    // setSelectedSubRegion(null); // 두 번째 드롭다운의 선택을 초기화
-    // setSubRegions(region.subReg || []);
-    // setSelectedSubRegion(null); // 두 번째 드롭다운의 선택을 초기화
     if (detailRef.current){
       detailRef.current.removeAttribute('open');
     }
   };
 
-  // const handleSelectSubRegion =(subRegion: ISubRegion)=>{
-  //   setSelectedSubRegion(subRegion);
-  //   if (subDetailRef.current){
-  //     subDetailRef.current.removeAttribute('open');
-  //   }
-  // const handleSelectSubRegion =(subRegion: ISubRegion)=>{
-  //   setSelectedSubRegion(subRegion);
-  //   if (subDetailRef.current){
-  //     subDetailRef.current.removeAttribute('open');
-  //   }
-    
-    
-  //};
-  //};
   useEffect(()=>{
     if (selectedRegion){
       const combinedRegion = `${selectedRegion.initial || ""}`;
