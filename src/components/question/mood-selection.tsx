@@ -26,7 +26,11 @@ const TagA = styled.div<{$isSelected: boolean}>`
   box-shadow: 0px 2px 5px grey;
 `;
 
-const MoodSelection = ({$updateAnswer}) => {
+interface MoodSelectionProps {
+  $updateAnswer: (category: string, value: string | string[]) => void;
+}
+
+const MoodSelection: React.FC<MoodSelectionProps> = ({$updateAnswer}) =>{
   // 분위기 질문
   const moodOptions1 = ["연인과", "친구와", "가족모임"];
   const moodOptions2 = ["파티", "진지한 대화", "조용한"];
@@ -36,17 +40,20 @@ const MoodSelection = ({$updateAnswer}) => {
 
   // 옵션을 선택 또는 해제할 때 호출되는 함수
   const toggleOption = (option: string) => {
+    let updatedOptions = [];
     if (selectedOptions.includes(option)) {
       // 이미 선택된 옵션이면 선택 해제
-      setSelectedOptions(selectedOptions.filter((item) => item !== option));
+      updatedOptions = selectedOptions.filter((item) => item !== option);
     } else {
       // 선택되지 않은 옵션이면 선택
-      setSelectedOptions([...selectedOptions, option]);
+      updatedOptions = [...selectedOptions, option];
     }
+    setSelectedOptions(updatedOptions);
+    $updateAnswer("mood", updatedOptions);
   };
-  useEffect(()=>{
-    $updateAnswer("mood",selectedOptions);
-  },[selectedOptions]);
+  // useEffect(()=>{
+  //   $updateAnswer("mood",selectedOptions);
+  // },[selectedOptions, $updateAnswer]);
   // 분위기 선택과 관련된 상태 및 로직을 이곳에 작성
   return (
     <>

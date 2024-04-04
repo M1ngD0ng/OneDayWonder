@@ -26,7 +26,12 @@ const TagA = styled.div<{$isSelected: boolean}>`
   box-shadow: 0px 2px 5px grey;
 `;
 
-const PeopleSelection = ({$updateAnswer}) => {
+interface PeopleSelectionProps {
+  $updateAnswer: (category: string, value: string | string[]) => void;
+}
+
+
+const PeopleSelection: React.FC<PeopleSelectionProps> = ({$updateAnswer}) =>{
    // 인원 질문
    const [isSelectPeople, setIsSelectPeople] = useState(false);
    const [selectedPeople, setSelectedPeople] = useState(0);
@@ -49,7 +54,9 @@ const PeopleSelection = ({$updateAnswer}) => {
    };
 
    useEffect(()=>{
-    $updateAnswer("people",selectedPeople);
+    if (selectedPeople!==0){
+      $updateAnswer("people",selectedPeople.toString());
+    }
    },[selectedPeople]);
   // 인원 선택과 관련된 상태 및 로직을 이곳에 작성
   return (

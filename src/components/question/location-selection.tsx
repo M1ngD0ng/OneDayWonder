@@ -55,19 +55,15 @@ const Summary=styled.summary`
     outline: none; /* 포커스 상태일 때 테두리 제거 */
   }
 `;
+interface LocationSelectionProps {
+  $updateAnswer: (category: string, value: string | string[]) => void;
+}
 
-const LocationSelection = ({$updateAnswer}) => {
+const LocationSelection: React.FC<LocationSelectionProps> = ({$updateAnswer}) => {
   // 지역 질문
   const [regionData, setRegionData] = useState<IRegion[]>([]);
   const [selectedRegion, setSelectedRegion] = useState<IRegion | null>(null);
- // const [subRegions, setSubRegions] = useState<ISubRegion[]>([]);
- // const [selectedSubRegion, setSelectedSubRegion] = useState<ISubRegion | null>(null);
- // const [subRegions, setSubRegions] = useState<ISubRegion[]>([]);
- // const [selectedSubRegion, setSelectedSubRegion] = useState<ISubRegion | null>(null);
-
   const detailRef=useRef<HTMLDetailsElement>(null);
-  //const subDetailRef=useRef<HTMLDetailsElement>(null);
-  //const subDetailRef=useRef<HTMLDetailsElement>(null);
 
   const fetchRegionsData = async () => {
     const q = query(collection(db, "regions"),
